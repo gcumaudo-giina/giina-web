@@ -1,26 +1,82 @@
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
-
+/* ─── Giina Design Brand System ─────────────────────────────────────── */
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  /* Colour Palette */
+  --color-off-white:        #F7F6F4;
+  --color-warm-grey:        #D9D6D4;
+  --color-soft-stone:       #CFCDC9;
+  --color-sand-beige:       #A69885;
+  --color-taupe-earth:      #8B816E;
+  --color-technical-grey:   #4D5257;
+  --color-terracotta:       #BC7856;
+
+  /* Semantic aliases */
+  --color-background:       var(--color-off-white);
+  --color-surface:          var(--color-warm-grey);
+  --color-border:           var(--color-soft-stone);
+  --color-text-secondary:   var(--color-sand-beige);
+  --color-text-body:        var(--color-taupe-earth);
+  --color-text-primary:     var(--color-technical-grey);
+  --color-accent:           var(--color-terracotta);
+
+  /* Typography */
+  --font-display:           var(--font-open-sauce-one);
+  --font-editorial:         var(--font-forum);
+  --font-body:              var(--font-ibm-plex-sans);
+  --font-label:             var(--font-open-sauce-one);
+
+  /* Spacing scale */
+  --spacing-section:        clamp(5rem, 10vw, 9rem);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+/* ─── Base styles ────────────────────────────────────────────────────── */
+*, *::before, *::after {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background-color: #F7F6F4;
+  color: #4D5257;
+  font-family: var(--font-ibm-plex-sans, 'IBM Plex Sans', sans-serif);
+  font-weight: 300;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  cursor: none; /* custom cursor activo */
+}
+
+/* Hide default cursor on interactive elements for custom cursor */
+a, button, [role="button"] {
+  cursor: none;
+}
+
+/* ─── Typography helpers ─────────────────────────────────────────────── */
+.font-display {
+  font-family: var(--font-open-sauce-one, 'Open Sauce One', serif);
+}
+
+.font-editorial {
+  font-family: var(--font-forum, 'Forum', serif);
+}
+
+.font-body {
+  font-family: var(--font-ibm-plex-sans, 'IBM Plex Sans', sans-serif);
+}
+
+/* Terracotta accent line — solo como micro-detalle */
+.accent-line {
+  display: block;
+  width: 0.7pt;
+  background-color: #BC7856;
+}
+
+.accent-underline {
+  text-decoration: underline;
+  text-decoration-color: #BC7856;
+  text-decoration-thickness: 0.7px;
+  text-underline-offset: 4px;
 }

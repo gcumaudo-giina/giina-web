@@ -1,0 +1,62 @@
+{
+  "nav": {
+    "projects": "Projects",
+    "studio": "Studio",
+    "contact": "Contact"
+  },
+  "hero": {
+    "scroll": "Scroll"
+  },
+  "studio_chapter": {
+    "label": "The Atelier",
+    "headline": "Making Design Transcendent.",
+    "body": "We believe spaces are not just seen — they are felt. Every project is a conversation between materiality, light, and the people who live within it."
+  },
+  "services": {
+    "label": "Services",
+    "items": {
+      "concept": {
+        "title": "Concept & Aesthetic Design",
+        "description": "Full spatial vision, moodboards and creative direction."
+      },
+      "technical": {
+        "title": "Technical Development",
+        "description": "Floor plans, construction details and technical documentation."
+      },
+      "selection": {
+        "title": "Selection & Supply",
+        "description": "Curation and sourcing of furniture, materials and finishes."
+      },
+      "coordination": {
+        "title": "Works Coordination",
+        "description": "On-site management to ensure the final vision is executed."
+      }
+    }
+  },
+  "projects": {
+    "label": "Selected Work",
+    "view": "View Project",
+    "next": "Next Project"
+  },
+  "contact": {
+    "label": "Contact",
+    "headline": "Let's create something\ntranscendent together.",
+    "name": "Your name",
+    "email": "Email address",
+    "message": "Tell us about your project",
+    "send": "Send",
+    "sending": "Sending...",
+    "success": "Message sent. We'll be in touch.",
+    "error": "Something went wrong. Please try again."
+  },
+  "footer": {
+    "tagline": "The design atelier.",
+    "location": "Marbella, Málaga, Spain",
+    "rights": "All rights reserved."
+  },
+  "meta": {
+    "projects_title": "Projects",
+    "studio_title": "Studio",
+    "contact_title": "Contact"
+  }
+}

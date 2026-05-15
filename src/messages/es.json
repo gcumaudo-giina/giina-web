@@ -1,0 +1,62 @@
+{
+  "nav": {
+    "projects": "Proyectos",
+    "studio": "Estudio",
+    "contact": "Contacto"
+  },
+  "hero": {
+    "scroll": "Scroll"
+  },
+  "studio_chapter": {
+    "label": "El Atelier",
+    "headline": "Haciendo el diseño trascendente.",
+    "body": "Creemos que los espacios no solo se ven, se sienten. Cada proyecto es una conversación entre la materialidad, la luz y las personas que los habitan."
+  },
+  "services": {
+    "label": "Servicios",
+    "items": {
+      "concept": {
+        "title": "Concepto y Diseño Estético",
+        "description": "Visión espacial completa, moodboards y dirección creativa."
+      },
+      "technical": {
+        "title": "Desarrollo Técnico",
+        "description": "Planos, detalles constructivos y documentación técnica."
+      },
+      "selection": {
+        "title": "Selección y Suministro",
+        "description": "Curaduría y aprovisionamiento de mobiliario, materiales y acabados."
+      },
+      "coordination": {
+        "title": "Coordinación de Obras",
+        "description": "Gestión en obra para garantizar la ejecución de la visión final."
+      }
+    }
+  },
+  "projects": {
+    "label": "Trabajos seleccionados",
+    "view": "Ver Proyecto",
+    "next": "Siguiente Proyecto"
+  },
+  "contact": {
+    "label": "Contacto",
+    "headline": "Creemos algo\ntrascendente juntos.",
+    "name": "Tu nombre",
+    "email": "Correo electrónico",
+    "message": "Cuéntanos sobre tu proyecto",
+    "send": "Enviar",
+    "sending": "Enviando...",
+    "success": "Mensaje enviado. Te contactaremos pronto.",
+    "error": "Algo salió mal. Por favor intenta de nuevo."
+  },
+  "footer": {
+    "tagline": "El atelier de diseño.",
+    "location": "Marbella, Málaga, España",
+    "rights": "Todos los derechos reservados."
+  },
+  "meta": {
+    "projects_title": "Proyectos",
+    "studio_title": "Estudio",
+    "contact_title": "Contacto"
+  }
+}
