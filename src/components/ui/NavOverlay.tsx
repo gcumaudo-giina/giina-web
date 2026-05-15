@@ -1,71 +1,188 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useTranslations, useLocale } from "next-intl";
 import Link from "next/link";
-import Logo from "./Logo";
 import LanguageSwitcher from "./LanguageSwitcher";
 
 const navLinks = [
-  { key: "projects", href: "/projects" },
-  { key: "studio",   href: "/studio" },
-  { key: "contact",  href: "/contact" },
+  { key: "projects",   href: "/projects"   },
+  { key: "studio",     href: "/studio"     },
+  { key: "contact",    href: "/contact"    },
 ];
 
 export default function NavOverlay() {
-  const [open, setOpen] = useState(false);
+  const [open, setOpen]         = useState(false);
+  const [scrolled, setScrolled] = useState(false);
   const t      = useTranslations("nav");
   const locale = useLocale();
 
+  useEffect(() => {
+    const onScroll = () => setScrolled(window.scrollY > 40);
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
+  }, []);
+
+  // Lock scroll when overlay is open
+  useEffect(() => {
+    document.body.style.overflow = open ? "hidden" : "";
+    return () => { document.body.style.overflow = ""; };
+  }, [open]);
+
   return (
     <>
-      {/* Fixed header */}
-      <header className="fixed top-0 left-0 right-0 z-50 flex items-center justify-between px-8 py-6 mix-blend-multiply">
-        <Logo variant="dark" />
-        <button
-          onClick={() => setOpen(true)}
-          aria-label="Open menu"
-          className="flex flex-col gap-1.5 group"
+      {/* ── Fixed header ─────────────────────────────────────────────── */}
+      <header
+        style={{
+          position: "fixed",
+          top: 0, left: 0, right: 0,
+          zIndex: 200,
+          padding: scrolled
+            ? "0.8rem clamp(1.25rem, 3.2vw, 2.5rem)"
+            : "1.1rem clamp(1.25rem, 3.2vw, 2.5rem)",
+          display: "grid",
+          gridTemplateColumns: "1fr auto 1fr",
+          alignItems: "center",
+          gap: "2rem",
+          color: "#F7F6F4",
+          mixBlendMode: "difference",
+          transition: "padding 0.4s ease",
+        }}
+      >
+        {/* Left links — hidden on mobile */}
+        <nav
+          style={{ display: "flex", gap: "1.75rem", alignItems: "center" }}
+          className="nav-left-links"
         >
-          <span className="block w-6 h-px bg-technical-grey transition-all group-hover:w-8" />
-          <span className="block w-4 h-px bg-technical-grey transition-all group-hover:w-8" />
-        </button>
+          {navLinks.slice(0, 2).map((link) => (
+            <Link
+              key={link.key}
+              href={`/${locale}${link.href}`}
+              style={{
+                fontFamily: "var(--font-ibm-plex-mono, monospace)",
+                fontSize: 11,
+                letterSpacing: ".18em",
+                textTransform: "uppercase",
+                color: "inherit",
+                position: "relative",
+                padding: "4px 0",
+              }}
+              className="nav-underline-link"
+            >
+              {t(link.key)}
+            </Link>
+          ))}
+        </nav>
+
+        {/* Center — GIINA wordmark */}
+        <div style={{ textAlign: "center" }}>
+          <Link
+            href={`/${locale}`}
+            style={{
+              fontFamily: "var(--font-open-sauce-one, sans-serif)",
+              fontWeight: 300,
+              fontSize: 16,
+              letterSpacing: "0.32em",
+              textIndent: "0.32em",
+              color: "inherit",
+            }}
+          >
+            GIINA
+          </Link>
+        </div>
+
+        {/* Right — contact + lang + hamburger */}
+        <div style={{ display: "flex", gap: "1.75rem", alignItems: "center", justifyContent: "flex-end" }}>
+          <Link
+            href={`/${locale}/contact`}
+            style={{
+              fontFamily: "var(--font-ibm-plex-mono, monospace)",
+              fontSize: 11,
+              letterSpacing: ".18em",
+              textTransform: "uppercase",
+              color: "inherit",
+            }}
+            className="nav-underline-link nav-hide-mobile"
+          >
+            {t("contact")}
+          </Link>
+
+          <button
+            onClick={() => setOpen(true)}
+            aria-label="Open menu"
+            style={{ display: "flex", flexDirection: "column", gap: 7, background: "none", border: 0, padding: 4, cursor: "none" }}
+          >
+            <span style={{ display: "block", width: 28, height: 1.5, background: "currentColor", transition: "width .3s ease" }} />
+            <span style={{ display: "block", width: 18, height: 1.5, background: "currentColor", transition: "width .3s ease" }} />
+          </button>
+        </div>
       </header>
 
-      {/* Full-screen overlay */}
+      {/* ── Full-screen overlay ───────────────────────────────────────── */}
       <AnimatePresence>
         {open && (
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            transition={{ duration: 0.4 }}
-            className="fixed inset-0 z-[200] bg-off-white flex flex-col px-8 py-6"
+            transition={{ duration: 0.35 }}
+            style={{
+              position: "fixed",
+              inset: 0,
+              zIndex: 300,
+              background: "#4D5257",
+              display: "flex",
+              flexDirection: "column",
+              padding: "clamp(1.25rem, 3.2vw, 2.5rem)",
+            }}
           >
             {/* Top row */}
-            <div className="flex items-center justify-between">
-              <Logo variant="dark" />
-              <button onClick={() => setOpen(false)} aria-label="Close menu" className="text-technical-grey">
-                <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
-                  <path d="M6 6l12 12M18 6L6 18" stroke="currentColor" strokeWidth="1" />
+            <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
+              <span style={{
+                fontFamily: "var(--font-open-sauce-one, sans-serif)",
+                fontWeight: 300,
+                fontSize: 16,
+                letterSpacing: "0.32em",
+                color: "#F7F6F4",
+              }}>
+                GIINA
+              </span>
+              <button
+                onClick={() => setOpen(false)}
+                aria-label="Close menu"
+                style={{ color: "#F7F6F4", background: "none", border: 0, cursor: "none", padding: 4 }}
+              >
+                <svg width="28" height="28" viewBox="0 0 28 28" fill="none">
+                  <path d="M7 7l14 14M21 7L7 21" stroke="currentColor" strokeWidth="1" strokeLinecap="round" />
                 </svg>
               </button>
             </div>
 
-            {/* Links */}
-            <nav className="flex-1 flex flex-col justify-center gap-8">
+            {/* Nav links — stagger in */}
+            <nav style={{ flex: 1, display: "flex", flexDirection: "column", justifyContent: "center", gap: "0.5rem" }}>
               {navLinks.map((link, i) => (
                 <motion.div
                   key={link.key}
-                  initial={{ opacity: 0, y: 20 }}
+                  initial={{ opacity: 0, y: 40 }}
                   animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: 0.1 + i * 0.08 }}
+                  exit={{ opacity: 0, y: 20 }}
+                  transition={{ delay: 0.08 + i * 0.09, duration: 0.6, ease: [0.2, 0.8, 0.2, 1] }}
                 >
                   <Link
                     href={`/${locale}${link.href}`}
                     onClick={() => setOpen(false)}
-                    className="font-display text-5xl font-light text-technical-grey hover:text-sand-beige transition-colors"
+                    style={{
+                      fontFamily: "var(--font-open-sauce-one, sans-serif)",
+                      fontWeight: 200,
+                      fontSize: "clamp(52px, 9vw, 96px)",
+                      letterSpacing: "-0.025em",
+                      lineHeight: 1.05,
+                      color: "#F7F6F4",
+                      display: "block",
+                      transition: "color 0.3s ease",
+                    }}
+                    className="overlay-nav-link"
                   >
                     {t(link.key)}
                   </Link>
@@ -73,14 +190,53 @@ export default function NavOverlay() {
               ))}
             </nav>
 
-            {/* Footer row */}
-            <div className="flex items-center justify-between">
+            {/* Bottom row */}
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ delay: 0.4 }}
+              style={{ display: "flex", alignItems: "flex-end", justifyContent: "space-between" }}
+            >
               <LanguageSwitcher />
-              <span className="font-body text-xs text-sand-beige">Marbella, Spain</span>
-            </div>
+              <div style={{
+                fontFamily: "var(--font-ibm-plex-mono, monospace)",
+                fontSize: 10,
+                letterSpacing: ".22em",
+                textTransform: "uppercase",
+                color: "#A69885",
+                textAlign: "right",
+                lineHeight: 1.7,
+              }}>
+                <div style={{ color: "#BC7856" }}>◆</div>
+                <div>Marbella · ES</div>
+              </div>
+            </motion.div>
           </motion.div>
         )}
       </AnimatePresence>
+
+      <style>{`
+        @media (max-width: 700px) {
+          .nav-left-links { display: none !important; }
+          .nav-hide-mobile { display: none !important; }
+        }
+        .overlay-nav-link:hover { color: #A69885 !important; }
+        .nav-underline-link { position: relative; }
+        .nav-underline-link::after {
+          content: "";
+          position: absolute;
+          left: 0; right: 0; bottom: 0;
+          height: 1px;
+          background: currentColor;
+          transform: scaleX(0);
+          transform-origin: right center;
+          transition: transform 0.5s cubic-bezier(0.2,0.8,0.2,1);
+        }
+        .nav-underline-link:hover::after {
+          transform: scaleX(1);
+          transform-origin: left center;
+        }
+      `}</style>
     </>
   );
 }

@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
-import { Forum, IBM_Plex_Sans } from "next/font/google";
+import { Forum, IBM_Plex_Sans, IBM_Plex_Mono } from "next/font/google";
 import localFont from "next/font/local";
+import Loader from "@/components/ui/Loader";
 import "./globals.css";
 
 /* Open Sauce One — self-hosted (place files in public/fonts/) */
@@ -29,6 +30,13 @@ const ibmPlexSans = IBM_Plex_Sans({
   display: "swap",
 });
 
+const ibmPlexMono = IBM_Plex_Mono({
+  weight: ["300", "400"],
+  subsets: ["latin"],
+  variable: "--font-ibm-plex-mono",
+  display: "swap",
+});
+
 export const metadata: Metadata = {
   title: "GIINA — Making Design Transcendent",
   description: "The design atelier. Warm minimalism, silent luxury and technical precision. Marbella, Spain.",
@@ -50,9 +58,10 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${openSauceOne.variable} ${forum.variable} ${ibmPlexSans.variable} h-full`}
+      className={`${openSauceOne.variable} ${forum.variable} ${ibmPlexSans.variable} ${ibmPlexMono.variable} h-full`}
     >
       <body className="min-h-full flex flex-col bg-off-white text-technical-grey">
+        <Loader />
         {children}
       </body>
     </html>

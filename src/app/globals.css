@@ -24,10 +24,12 @@
   --font-display:           var(--font-open-sauce-one);
   --font-editorial:         var(--font-forum);
   --font-body:              var(--font-ibm-plex-sans);
+  --font-mono:              var(--font-ibm-plex-mono);
   --font-label:             var(--font-open-sauce-one);
 
   /* Spacing scale */
   --spacing-section:        clamp(5rem, 10vw, 9rem);
+  --col-edge:               clamp(1.25rem, 3.2vw, 2.5rem);
 }
 
 /* ─── Base styles ────────────────────────────────────────────────────── */
@@ -46,10 +48,27 @@ body {
   font-weight: 300;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  cursor: none; /* custom cursor activo */
+  cursor: none;
+  overflow-x: hidden;
 }
 
-/* Hide default cursor on interactive elements for custom cursor */
+/* Grain texture overlay — fixed, full screen, non-interactive */
+body::after {
+  content: "";
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 9990;
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='160'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 .9 0'/></filter><rect width='100%25' height='100%25' filter='url(%23n)' opacity='1'/></svg>");
+  opacity: 0.055;
+  mix-blend-mode: multiply;
+}
+
+::selection {
+  background: #BC7856;
+  color: #F7F6F4;
+}
+
 a, button, [role="button"] {
   cursor: none;
 }
@@ -67,7 +86,11 @@ a, button, [role="button"] {
   font-family: var(--font-ibm-plex-sans, 'IBM Plex Sans', sans-serif);
 }
 
-/* Terracotta accent line — solo como micro-detalle */
+.font-mono {
+  font-family: var(--font-ibm-plex-mono, 'IBM Plex Mono', monospace);
+}
+
+/* ─── Terracotta micro-detail helpers ────────────────────────────────── */
 .accent-line {
   display: block;
   width: 0.7pt;
@@ -79,4 +102,58 @@ a, button, [role="button"] {
   text-decoration-color: #BC7856;
   text-decoration-thickness: 0.7px;
   text-underline-offset: 4px;
+}
+
+/* Terracotta accent bar — used before dt/label blocks */
+.accent-bar::before {
+  content: "";
+  position: absolute;
+  top: -1px;
+  left: 0;
+  width: 24px;
+  height: 1px;
+  background: #BC7856;
+}
+
+/* ─── Chapter lines (StudioChapter) ─────────────────────────────────── */
+.chapter-line {
+  color: #CFCDC9;
+  transition: color 0.8s ease;
+}
+
+.chapter-line.is-active {
+  color: #4D5257;
+}
+
+.chapter-line em {
+  font-family: var(--font-forum, 'Forum', serif);
+  font-style: italic;
+  font-weight: 400;
+  color: #8B816E;
+  transition: color 0.8s ease;
+}
+
+.chapter-line.is-active em {
+  color: #BC7856;
+}
+
+/* ─── Keyframe animations ────────────────────────────────────────────── */
+@keyframes marquee-scroll {
+  to { transform: translateX(-50%); }
+}
+
+@keyframes hero-drift {
+  0%   { transform: scale(1.05) translate(0, 0); }
+  50%  { transform: scale(1.12) translate(-2%, -1.5%); }
+  100% { transform: scale(1.18) translate(1.5%, 2%); }
+}
+
+@keyframes cue-run {
+  0%   { top: -30%; }
+  100% { top: 110%; }
+}
+
+@keyframes loader-fill {
+  from { transform: scaleX(0); }
+  to   { transform: scaleX(1); }
 }

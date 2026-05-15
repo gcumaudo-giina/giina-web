@@ -2,6 +2,7 @@
 
 import { useTranslations } from "next-intl";
 import HeroVideo from "@/components/home/HeroVideo";
+import Marquee from "@/components/ui/Marquee";
 import StudioChapter from "@/components/home/StudioChapter";
 import ProjectsGrid from "@/components/home/ProjectsGrid";
 import ServicesSection from "@/components/home/ServicesSection";
@@ -13,6 +14,7 @@ export default function HomePage() {
   return (
     <main>
       <HeroVideo />
+      <Marquee />
       <StudioChapter />
       <ProjectsGrid />
       <ServicesSection />
