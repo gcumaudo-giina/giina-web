@@ -36,7 +36,20 @@ export default function ComingSoonPage() {
         }
 
         .video-bg { position: fixed; inset: 0; z-index: 0; }
-        .video-bg video { width: 100%; height: 100%; object-fit: cover; }
+        .video-bg video {
+          width: 100%; height: 100%;
+          object-fit: cover;
+          object-position: center;
+        }
+
+        /* Sirve el video según orientación de pantalla */
+        .video-horizontal { display: block; }
+        .video-vertical   { display: none;  }
+
+        @media (orientation: portrait) {
+          .video-horizontal { display: none;  }
+          .video-vertical   { display: block; }
+        }
 
         .overlay-dark {
           position: fixed; inset: 0; z-index: 1;
@@ -148,9 +161,21 @@ export default function ComingSoonPage() {
         }
       `}</style>
 
+      {/* Video landscape — se oculta en portrait */}
       <div className="video-bg">
-        <video autoPlay muted loop playsInline preload="auto">
-          <source src="/videos/hero-cut.mp4" type="video/mp4" />
+        <video
+          className="video-horizontal"
+          autoPlay muted loop playsInline preload="auto"
+        >
+          <source src="/videos/holder-horizontal.mp4" type="video/mp4" />
+        </video>
+
+        {/* Video portrait — se oculta en landscape */}
+        <video
+          className="video-vertical"
+          autoPlay muted loop playsInline preload="none"
+        >
+          <source src="/videos/holder-vertical.mp4" type="video/mp4" />
         </video>
       </div>
 
