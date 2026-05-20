@@ -197,7 +197,7 @@ export default function ComingSoonPage() {
 
       <footer className="cs-bottom">
         <div className="cs-meta">
-          Mijas, España<br />
+          Marbella, España<br />
           2026
         </div>
         <a
@@ -212,7 +212,7 @@ export default function ComingSoonPage() {
             <circle cx="12" cy="12" r="4.5" />
             <circle cx="17.5" cy="6.5" r="0.8" fill="currentColor" stroke="none" />
           </svg>
-          @giinadesign
+          GIINADESIGN
         </a>
       </footer>
     </>
