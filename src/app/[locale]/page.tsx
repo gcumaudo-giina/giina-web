@@ -1,24 +1,25 @@
 "use client";
 
-import { useTranslations } from "next-intl";
-import HeroVideo from "@/components/home/HeroVideo";
-import Marquee from "@/components/ui/Marquee";
-import StudioChapter from "@/components/home/StudioChapter";
-import ProjectsGrid from "@/components/home/ProjectsGrid";
+import HeroVideo       from "@/components/home/HeroVideo";
+import AtelierFragment from "@/components/home/AtelierFragment";
+import Marquee         from "@/components/ui/Marquee";
+import StudioChapter   from "@/components/home/StudioChapter";
+import MaterialEcho    from "@/components/home/MaterialEcho";
 import ServicesSection from "@/components/home/ServicesSection";
-import ContactCTA from "@/components/home/ContactCTA";
+import BeginSection    from "@/components/home/BeginSection";
+import Footer          from "@/components/ui/Footer";
 
 export default function HomePage() {
-  const t = useTranslations();
-
   return (
     <main>
       <HeroVideo />
+      <AtelierFragment />
       <Marquee />
       <StudioChapter />
-      <ProjectsGrid />
+      <MaterialEcho />
       <ServicesSection />
-      <ContactCTA />
+      <BeginSection />
+      <Footer />
     </main>
   );
 }

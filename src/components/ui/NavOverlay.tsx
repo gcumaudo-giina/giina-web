@@ -4,7 +4,25 @@ import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useTranslations, useLocale } from "next-intl";
 import Link from "next/link";
+import Image from "next/image";
 import LanguageSwitcher from "./LanguageSwitcher";
+
+function LiveTime() {
+  const [time, setTime] = useState("");
+  useEffect(() => {
+    const update = () => {
+      setTime(new Date().toLocaleTimeString("en-GB", {
+        timeZone: "Europe/Madrid",
+        hour: "2-digit",
+        minute: "2-digit",
+      }));
+    };
+    update();
+    const id = setInterval(update, 1000);
+    return () => clearInterval(id);
+  }, []);
+  return <>{time}</>;
+}
 
 const navLinks = [
   { key: "projects",   href: "/projects"   },
@@ -59,6 +77,7 @@ export default function NavOverlay() {
             <Link
               key={link.key}
               href={`/${locale}${link.href}`}
+              data-cursor-hover={t(link.key)}
               style={{
                 fontFamily: "var(--font-ibm-plex-mono, monospace)",
                 fontSize: 11,
@@ -75,20 +94,17 @@ export default function NavOverlay() {
           ))}
         </nav>
 
-        {/* Center — GIINA wordmark */}
-        <div style={{ textAlign: "center" }}>
-          <Link
-            href={`/${locale}`}
-            style={{
-              fontFamily: "var(--font-open-sauce-one, sans-serif)",
-              fontWeight: 300,
-              fontSize: 16,
-              letterSpacing: "0.32em",
-              textIndent: "0.32em",
-              color: "inherit",
-            }}
-          >
-            GIINA
+        {/* Center — GIINA logo mark */}
+        <div style={{ textAlign: "center", lineHeight: 0 }}>
+          <Link href={`/${locale}`} aria-label="GIINA — Home" data-cursor-hover="Home">
+            <Image
+              src="/brand/giina-mark-white.png"
+              alt="GIINA"
+              width={52}
+              height={24}
+              style={{ width: 52, height: "auto", display: "inline-block" }}
+              priority
+            />
           </Link>
         </div>
 
@@ -107,6 +123,19 @@ export default function NavOverlay() {
           >
             {t("contact")}
           </Link>
+
+          <span
+            className="nav-hide-mobile"
+            style={{
+              fontFamily: "var(--font-ibm-plex-mono, monospace)",
+              fontSize: 10,
+              letterSpacing: ".18em",
+              color: "inherit",
+              opacity: 0.5,
+            }}
+          >
+            <LiveTime />
+          </span>
 
           <button
             onClick={() => setOpen(true)}
@@ -139,15 +168,13 @@ export default function NavOverlay() {
           >
             {/* Top row */}
             <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
-              <span style={{
-                fontFamily: "var(--font-open-sauce-one, sans-serif)",
-                fontWeight: 300,
-                fontSize: 16,
-                letterSpacing: "0.32em",
-                color: "#F7F6F4",
-              }}>
-                GIINA
-              </span>
+              <Image
+                src="/brand/giina-mark-white.png"
+                alt="GIINA"
+                width={52}
+                height={24}
+                style={{ width: 52, height: "auto", display: "inline-block" }}
+              />
               <button
                 onClick={() => setOpen(false)}
                 aria-label="Close menu"

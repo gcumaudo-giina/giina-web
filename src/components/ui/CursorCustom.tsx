@@ -1,54 +1,82 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
-import { gsap } from "gsap";
+import { useEffect, useRef } from "react";
 
 export default function CursorCustom() {
-  const dotRef   = useRef<HTMLDivElement>(null);
-  const ringRef  = useRef<HTMLDivElement>(null);
-  const labelRef = useRef<HTMLSpanElement>(null);
-  const [visible, setVisible] = useState(false);
+  const dotRef  = useRef<HTMLDivElement>(null);
+  const ringRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    const dot   = dotRef.current;
-    const ring  = ringRef.current;
-    const label = labelRef.current;
+    // Touch-only devices: hide cursor
+    if (matchMedia("(pointer: coarse)").matches) return;
+
+    const dot  = dotRef.current;
+    const ring = ringRef.current;
     if (!dot || !ring) return;
 
-    const xDot  = gsap.quickTo(dot,  "x", { duration: 0.08, ease: "none" });
-    const yDot  = gsap.quickTo(dot,  "y", { duration: 0.08, ease: "none" });
-    const xRing = gsap.quickTo(ring, "x", { duration: 0.38, ease: "power3" });
-    const yRing = gsap.quickTo(ring, "y", { duration: 0.38, ease: "power3" });
+    // Mouse position (dot follows instantly)
+    let mx = window.innerWidth / 2;
+    let my = window.innerHeight / 2;
+    // Ring position (lerped in RAF)
+    let rx = mx;
+    let ry = my;
 
-    const move = (e: MouseEvent) => {
-      if (!visible) setVisible(true);
-      xDot(e.clientX);
-      yDot(e.clientY);
-      xRing(e.clientX);
-      yRing(e.clientY);
+    const onMove = (e: PointerEvent) => {
+      mx = e.clientX;
+      my = e.clientY;
+      dot.style.transform = `translate(${mx}px, ${my}px)`;
     };
 
-    const expand = (e: MouseEvent) => {
-      const target  = (e.target as HTMLElement).closest("[data-cursor-label]");
-      const curLabel = target?.getAttribute("data-cursor-label") ?? "";
+    // RAF loop — ring lerps toward mouse
+    let rafId: number;
+    const loop = () => {
+      rx += (mx - rx) * 0.16;
+      ry += (my - ry) * 0.16;
+      ring.style.transform = `translate(${rx}px, ${ry}px)`;
+      rafId = requestAnimationFrame(loop);
+    };
+    rafId = requestAnimationFrame(loop);
+
+    window.addEventListener("pointermove", onMove);
+
+    // Hover state — expand ring, show label, hide dot
+    const onEnter = (e: Event) => {
+      const el = e.currentTarget as HTMLElement;
+      const text = el.getAttribute("data-cursor-hover") ?? "";
+      ring.style.width = "92px";
+      ring.style.height = "92px";
+      ring.style.marginTop = "-46px";
+      ring.style.marginLeft = "-46px";
+      ring.style.background = "#4D5257";
+      ring.style.borderColor = "#4D5257";
+      const label = ring.querySelector<HTMLSpanElement>("[data-cursor-label]");
       if (label) {
-        label.textContent = curLabel;
-        gsap.to(label, { opacity: curLabel ? 1 : 0, duration: 0.2 });
+        label.textContent = text;
+        label.style.opacity = text ? "1" : "0";
       }
-      gsap.to(ring, { width: 72, height: 72, borderColor: "#BC7856", duration: 0.35, ease: "power2.out" });
-      gsap.to(dot,  { scale: 0, duration: 0.2 });
+      dot.style.opacity = "0";
     };
-
-    const shrink = () => {
-      if (label) gsap.to(label, { opacity: 0, duration: 0.15 });
-      gsap.to(ring, { width: 36, height: 36, borderColor: "rgba(77,82,87,0.5)", duration: 0.35, ease: "power2.out" });
-      gsap.to(dot,  { scale: 1, duration: 0.25 });
+    const onLeave = () => {
+      ring.style.width = "36px";
+      ring.style.height = "36px";
+      ring.style.marginTop = "-18px";
+      ring.style.marginLeft = "-18px";
+      ring.style.background = "transparent";
+      ring.style.borderColor = "rgba(77,82,87,0.6)";
+      const label = ring.querySelector<HTMLSpanElement>("[data-cursor-label]");
+      if (label) {
+        label.textContent = "";
+        label.style.opacity = "0";
+      }
+      dot.style.opacity = "1";
     };
 
     const attach = () => {
-      document.querySelectorAll("a, button, [data-cursor]").forEach((el) => {
-        el.addEventListener("mouseenter", expand as EventListener);
-        el.addEventListener("mouseleave", shrink);
+      document.querySelectorAll<HTMLElement>("a, button, [data-cursor-hover]").forEach((el) => {
+        el.removeEventListener("pointerenter", onEnter);
+        el.removeEventListener("pointerleave", onLeave);
+        el.addEventListener("pointerenter", onEnter);
+        el.addEventListener("pointerleave", onLeave);
       });
     };
 
@@ -56,62 +84,70 @@ export default function CursorCustom() {
     const observer = new MutationObserver(attach);
     observer.observe(document.body, { childList: true, subtree: true });
 
-    window.addEventListener("mousemove", move);
     return () => {
-      window.removeEventListener("mousemove", move);
+      cancelAnimationFrame(rafId);
+      window.removeEventListener("pointermove", onMove);
       observer.disconnect();
     };
-  }, []); // eslint-disable-line react-hooks/exhaustive-deps
+  }, []);
 
   return (
     <>
-      {/* Dot — terracotta */}
+      {/* Dot — terracotta, follows instantly */}
       <div
         ref={dotRef}
         style={{
           position: "fixed",
-          top: 0, left: 0,
-          width: 5, height: 5,
+          top: 0,
+          left: 0,
+          width: 6,
+          height: 6,
+          marginTop: -3,
+          marginLeft: -3,
           borderRadius: "50%",
           background: "#BC7856",
           zIndex: 10000,
           pointerEvents: "none",
-          transform: "translate(-50%, -50%)",
-          opacity: visible ? 1 : 0,
-          transition: "opacity 0.3s",
+          willChange: "transform",
+          transition: "opacity 0.15s ease",
         }}
       />
 
-      {/* Ring */}
+      {/* Ring — lerped, expands on hover */}
       <div
         ref={ringRef}
         style={{
           position: "fixed",
-          top: 0, left: 0,
-          width: 36, height: 36,
+          top: 0,
+          left: 0,
+          width: 36,
+          height: 36,
+          marginTop: -18,
+          marginLeft: -18,
           borderRadius: "50%",
-          border: "1px solid rgba(77,82,87,0.5)",
+          border: "1px solid rgba(77,82,87,0.6)",
+          background: "transparent",
           zIndex: 9999,
           pointerEvents: "none",
-          transform: "translate(-50%, -50%)",
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
-          opacity: visible ? 1 : 0,
-          transition: "opacity 0.3s",
+          willChange: "transform",
+          display: "grid",
+          placeItems: "center",
+          transition:
+            "width 0.3s cubic-bezier(0.2,0.8,0.2,1), height 0.3s cubic-bezier(0.2,0.8,0.2,1), margin 0.3s cubic-bezier(0.2,0.8,0.2,1), background 0.25s ease, border-color 0.25s ease",
         }}
       >
         <span
-          ref={labelRef}
+          data-cursor-label
           style={{
             fontFamily: "var(--font-ibm-plex-mono, monospace)",
-            fontSize: 8,
-            letterSpacing: ".18em",
+            fontSize: 9,
+            letterSpacing: ".2em",
             textTransform: "uppercase",
-            color: "#4D5257",
+            color: "#F7F6F4",
             opacity: 0,
             whiteSpace: "nowrap",
             userSelect: "none",
+            transition: "opacity 0.2s ease",
           }}
         />
       </div>

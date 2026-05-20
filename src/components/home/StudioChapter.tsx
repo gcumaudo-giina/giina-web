@@ -3,17 +3,15 @@
 import { useEffect, useRef } from "react";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { useTranslations } from "next-intl";
+import CanvasFractalGrid from "@/components/ui/CanvasFractalGrid";
 
 gsap.registerPlugin(ScrollTrigger);
 
-const LINES = [
-  { text: "A space that",        em: "listens."           },
-  { text: "Materials before",    em: "moments."           },
-  { text: "Light is the first",  em: "finish."            },
-  { text: "Restraint, the loudest", em: "gesture."        },
-];
-
 export default function StudioChapter() {
+  const t = useTranslations("studio_chapter");
+  const lines = t.raw("lines") as { text: string; em: string }[];
+
   const sectionRef     = useRef<HTMLDivElement>(null);
   const progressBarRef = useRef<HTMLSpanElement>(null);
   const lineRefs       = useRef<(HTMLDivElement | null)[]>([]);
@@ -32,7 +30,7 @@ export default function StudioChapter() {
           // Activate lines progressively
           lineRefs.current.forEach((line, i) => {
             if (!line) return;
-            const threshold = i / LINES.length;
+            const threshold = i / lines.length;
             line.classList.toggle("is-active", p >= threshold);
           });
 
@@ -43,8 +41,8 @@ export default function StudioChapter() {
 
           // Update counter
           if (counterRef.current) {
-            const active = Math.min(Math.floor(p * LINES.length) + 1, LINES.length);
-            counterRef.current.textContent = `0${active} / 0${LINES.length}`;
+            const active = Math.min(Math.floor(p * lines.length) + 1, lines.length);
+            counterRef.current.textContent = `0${active} / 0${lines.length}`;
           }
         },
       });
@@ -57,8 +55,24 @@ export default function StudioChapter() {
     /* Tall section — scroll drives the sticky inner */
     <section
       ref={sectionRef}
-      style={{ position: "relative", minHeight: "260vh", padding: "0 clamp(1.25rem, 3.2vw, 2.5rem)" }}
+      style={{
+        position: "relative",
+        minHeight: "260vh",
+        padding: "0 clamp(1.25rem, 3.2vw, 2.5rem)",
+        paddingBottom: "var(--spacing-section)",
+      }}
     >
+      {/* CanvasFractalGrid background — dot wave with GIINA brand colors */}
+      <CanvasFractalGrid
+        className="absolute inset-0 w-full h-full"
+        dotOpacity={0.12}
+        dotSpacing={32}
+        waveIntensity={8}
+        waveRadius={220}
+        enableGradient={false}
+        noiseOpacity={0}
+      />
+
       {/* Top rule */}
       <div style={{ position: "absolute", top: 0, left: "clamp(1.25rem, 3.2vw, 2.5rem)", right: "clamp(1.25rem, 3.2vw, 2.5rem)", height: 1, background: "#CFCDC9" }} />
 
@@ -84,8 +98,8 @@ export default function StudioChapter() {
             color: "#A69885",
             display: "flex", flexDirection: "column", gap: ".3rem",
           }}>
-            <span><span style={{ color: "#BC7856" }}>◆</span> Chapter I</span>
-            <span>The Philosophy</span>
+            <span><span style={{ color: "#BC7856" }}>◆</span> {t("chapter")}</span>
+            <span>{t("philosophy")}</span>
             <span ref={counterRef} style={{ color: "#4D5257" }}>01 / 04</span>
           </div>
 
@@ -115,7 +129,7 @@ export default function StudioChapter() {
             }}>
               Note · 01
             </span>
-            We believe an interior is not decorated — it is composed. Each measure, each material, each shadow chosen for the way it lets a space breathe.
+            {t("note")}
           </div>
 
           <div style={{
@@ -126,22 +140,22 @@ export default function StudioChapter() {
             color: "#A69885",
             display: "flex", flexDirection: "column", gap: ".4rem",
           }}>
-            <span>By Gina Marchiori</span>
-            <span>Director · Founder</span>
+            <span>{t("author")}</span>
+            <span>{t("role")}</span>
           </div>
         </aside>
 
         {/* Center — animated chapter lines */}
         <div style={{ display: "flex", alignItems: "center" }}>
           <div style={{ display: "flex", flexDirection: "column", gap: 0 }}>
-            {LINES.map((line, i) => (
+            {lines.map((line, i) => (
               <div
                 key={i}
                 ref={(el) => { lineRefs.current[i] = el; }}
                 className={`chapter-line${i === 0 ? " is-active" : ""}`}
                 style={{
                   fontFamily: "var(--font-open-sauce-one, sans-serif)",
-                  fontWeight: 200,
+                  fontWeight: 300,
                   fontSize: "clamp(40px, 7vw, 104px)",
                   lineHeight: 1.0,
                   letterSpacing: "-0.025em",

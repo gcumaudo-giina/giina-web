@@ -1,9 +1,10 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef } from "react";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import Link from "next/link";
+import Image from "next/image";
 import { useLocale } from "next-intl";
 
 gsap.registerPlugin(ScrollTrigger);
@@ -16,11 +17,7 @@ const PROJECTS = [
     meta: "Marbella · 2026",
     slug: "villa-noura",
     tag: "01 / Villa Noura",
-    gradient: `
-      radial-gradient(45% 35% at 76% 30%, rgba(232,196,148,.55) 0%, transparent 70%),
-      radial-gradient(60% 50% at 22% 70%, rgba(120,82,55,.55) 0%, transparent 65%),
-      linear-gradient(165deg, #3a322b 0%, #5a4536 45%, #7b5a40 70%, #2a2520 100%)
-    `,
+    cover: "/projects/villa-noura/md/160.webp",
   },
   {
     num: "02",
@@ -29,11 +26,7 @@ const PROJECTS = [
     meta: "Marbella · 2025",
     slug: "villa-chiara",
     tag: "02 / Villa Chiara",
-    gradient: `
-      radial-gradient(50% 60% at 60% 40%, rgba(210,185,155,.55) 0%, transparent 70%),
-      radial-gradient(40% 50% at 30% 70%, rgba(100,75,50,.45) 0%, transparent 60%),
-      linear-gradient(150deg, #2e2a26 0%, #4a3b2e 50%, #6a5040 70%, #252220 100%)
-    `,
+    cover: "/projects/villa-chiara/md/A7V06013.webp",
   },
   {
     num: "03",
@@ -42,24 +35,18 @@ const PROJECTS = [
     meta: "Marbella · 2024",
     slug: "jardines-de-andalucia",
     tag: "03 / Jardines de Andalucía",
-    gradient: `
-      radial-gradient(55% 45% at 40% 30%, rgba(195,170,130,.45) 0%, transparent 65%),
-      radial-gradient(65% 55% at 75% 75%, rgba(140,95,60,.50) 0%, transparent 65%),
-      linear-gradient(170deg, #3c3428 0%, #564232 45%, #7a5e45 65%, #282420 100%)
-    `,
+    cover: null,
   },
 ];
 
 export default function ProjectsGrid() {
-  const sectionRef  = useRef<HTMLDivElement>(null);
-  const headRef     = useRef<HTMLDivElement>(null);
-  const listRef     = useRef<HTMLDivElement>(null);
-  const [activeRow, setActiveRow] = useState<string | null>(null);
-  const locale = useLocale();
+  const sectionRef = useRef<HTMLDivElement>(null);
+  const headRef    = useRef<HTMLDivElement>(null);
+  const listRef    = useRef<HTMLDivElement>(null);
+  const locale     = useLocale();
 
   useEffect(() => {
     const ctx = gsap.context(() => {
-      // Header reveal
       gsap.fromTo(headRef.current,
         { opacity: 0, y: 28 },
         {
@@ -67,7 +54,6 @@ export default function ProjectsGrid() {
           scrollTrigger: { trigger: headRef.current, start: "top 80%" },
         }
       );
-      // Rows stagger
       gsap.fromTo(".pgrid-row",
         { opacity: 0, y: 24 },
         {
@@ -104,7 +90,6 @@ export default function ProjectsGrid() {
         }}>
           <span style={{ color: "#BC7856" }}>◆</span> Index — Selected Work · MMXXIV — MMXXVI
         </div>
-
         <h2 style={{
           fontFamily: "var(--font-open-sauce-one, sans-serif)",
           fontWeight: 200,
@@ -120,7 +105,6 @@ export default function ProjectsGrid() {
             silences.
           </em>
         </h2>
-
         <div style={{
           textAlign: "right",
           fontFamily: "var(--font-ibm-plex-mono, monospace)",
@@ -132,46 +116,41 @@ export default function ProjectsGrid() {
       </div>
 
       {/* ── List ── */}
-      <div ref={listRef} style={{ position: "relative" }}>
+      <div ref={listRef} className="pgrid-list" style={{ position: "relative" }}>
 
-        {/* Preview pane — slides in on hover */}
-        <div
-          aria-hidden="true"
-          style={{
-            position: "absolute",
-            top: "1.5rem",
-            right: "calc(clamp(1.25rem, 3.2vw, 2.5rem) * -1)",
-            width: "50vw",
-            maxWidth: 900,
-            height: "calc(100% - 3rem)",
-            pointerEvents: "none",
-            zIndex: 1,
-            overflow: "hidden",
-          }}
-        >
+        {/* Big decorative number — appears behind rows on hover */}
+        {PROJECTS.map((p) => (
+          <span
+            key={`bignum-${p.num}`}
+            className="pgrid-bignum"
+            data-for={p.num}
+            aria-hidden="true"
+          >
+            {p.num}
+          </span>
+        ))}
+
+        {/* Preview pane — CSS :has() controls visibility via clip-path */}
+        <div className="pgrid-preview" aria-hidden="true">
           {PROJECTS.map((p) => (
-            <div
-              key={p.num}
-              style={{
-                position: "absolute",
-                inset: 0,
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "flex-end",
-                paddingRight: "clamp(1.25rem, 3.2vw, 2.5rem)",
-                opacity: activeRow === p.num ? 1 : 0,
-                transform: activeRow === p.num ? "none" : "translateX(8%)",
-                transition: "opacity .65s cubic-bezier(.2,.8,.2,1), transform .9s cubic-bezier(.2,.8,.2,1)",
-              }}
-            >
+            <div key={p.num} className={`pgrid-pane`} data-for={p.num}>
               <div style={{
                 width: "100%",
                 aspectRatio: "16 / 9",
                 maxHeight: "100%",
-                background: p.gradient,
+                background: "#2e2a26",
                 overflow: "hidden",
                 position: "relative",
               }}>
+                {p.cover && (
+                  <Image
+                    src={p.cover}
+                    alt={`${p.first} ${p.last}`}
+                    fill
+                    sizes="55vw"
+                    style={{ objectFit: "cover", objectPosition: "center" }}
+                  />
+                )}
                 <span style={{
                   position: "absolute",
                   top: "1rem", left: "1rem",
@@ -192,131 +171,93 @@ export default function ProjectsGrid() {
         </div>
 
         {/* Rows */}
-        {PROJECTS.map((p) => {
-          const dimmed = activeRow !== null && activeRow !== p.num;
-          const hovered = activeRow === p.num;
+        {PROJECTS.map((p) => (
+          <Link
+            key={p.num}
+            href={`/${locale}/projects/${p.slug}`}
+            className="pgrid-row"
+            data-row={p.num}
+            data-cursor-hover="Open"
+            style={{
+              position: "relative",
+              zIndex: 2,
+              display: "grid",
+              gridTemplateColumns: "minmax(120px, auto) auto 1fr minmax(160px, auto) auto",
+              alignItems: "baseline",
+              gap: "1.5rem",
+              padding: "2rem 0",
+              borderBottom: "1px solid #CFCDC9",
+              textDecoration: "none",
+              color: "#4D5257",
+            }}
+          >
+            <span style={{
+              fontFamily: "var(--font-ibm-plex-mono, monospace)",
+              fontSize: 11, letterSpacing: ".22em", textTransform: "uppercase",
+              color: "#4D5257",
+              display: "inline-flex", alignItems: "center", gap: 10,
+              whiteSpace: "nowrap",
+            }}>
+              <span className="pgrid-diamond" style={{ fontSize: 10, lineHeight: 1 }}>◆</span>
+              <span className="pgrid-rule" style={{ display: "inline-block", width: 16, height: 1, background: "#CFCDC9" }} />
+              N° {p.num}
+            </span>
 
-          return (
-            <Link
-              key={p.num}
-              href={`/${locale}/projects/${p.slug}`}
-              className="pgrid-row"
-              onMouseEnter={() => setActiveRow(p.num)}
-              onMouseLeave={() => setActiveRow(null)}
-              data-cursor-label="Open"
+            <span style={{
+              fontFamily: "var(--font-open-sauce-one, sans-serif)",
+              fontWeight: 200,
+              fontSize: "clamp(34px, 4.4vw, 52px)",
+              letterSpacing: "-0.02em",
+              lineHeight: 1.0,
+              color: "#4D5257",
+              whiteSpace: "nowrap",
+            }}>
+              {p.first}{" "}
+              <span className="pgrid-last">{p.last}</span>
+            </span>
+
+            <span
+              aria-hidden="true"
               style={{
-                position: "relative",
-                zIndex: 2,
-                display: "grid",
-                gridTemplateColumns: "minmax(120px, auto) auto 1fr minmax(160px, auto) auto",
-                alignItems: "baseline",
-                gap: "1.5rem",
-                padding: "2rem 0",
-                borderBottom: "1px solid #CFCDC9",
-                textDecoration: "none",
-                color: "#4D5257",
-                opacity: dimmed ? 0.35 : 1,
-                transition: "opacity .55s cubic-bezier(.2,.8,.2,1)",
+                height: "1em", alignSelf: "center",
+                backgroundImage: "radial-gradient(circle, #CFCDC9 1.2px, transparent 1.5px)",
+                backgroundSize: "9px 100%",
+                backgroundRepeat: "repeat-x",
+                backgroundPosition: "0 50%",
+                minWidth: 80,
+                display: "block",
               }}
-            >
-              {/* Number */}
+            />
+
+            <span style={{
+              fontFamily: "var(--font-ibm-plex-mono, monospace)",
+              fontSize: 11, letterSpacing: ".22em", textTransform: "uppercase",
+              color: "#A69885", whiteSpace: "nowrap", textAlign: "right",
+            }}>
+              {p.meta}
+            </span>
+
+            <span className="pgrid-arrow" style={{
+              position: "relative",
+              display: "inline-block",
+              width: 28, height: 1,
+              background: "#4D5257",
+              alignSelf: "center",
+              marginLeft: ".5rem",
+            }}>
               <span style={{
-                fontFamily: "var(--font-ibm-plex-mono, monospace)",
-                fontSize: 11, letterSpacing: ".22em", textTransform: "uppercase",
-                color: "#4D5257",
-                display: "inline-flex", alignItems: "center", gap: 10,
-                whiteSpace: "nowrap",
-              }}>
-                <span style={{
-                  color: hovered ? "#BC7856" : "#CFCDC9",
-                  fontSize: 10, transition: "color .35s ease", lineHeight: 1,
-                }}>◆</span>
-                <span style={{
-                  display: "inline-block",
-                  width: 16, height: 1,
-                  background: hovered ? "#BC7856" : "#CFCDC9",
-                  transition: "background .35s ease",
-                }} />
-                N° {p.num}
-              </span>
-
-              {/* Title */}
-              <span style={{
-                fontFamily: "var(--font-open-sauce-one, sans-serif)",
-                fontWeight: 200,
-                fontSize: "clamp(34px, 4.4vw, 52px)",
-                letterSpacing: "-0.02em",
-                lineHeight: 1.0,
-                color: "#4D5257",
-                whiteSpace: "nowrap",
-              }}>
-                {p.first}{" "}
-                <span style={{
-                  display: "inline-block",
-                  fontFamily: hovered ? "var(--font-forum, serif)" : "var(--font-open-sauce-one, sans-serif)",
-                  fontStyle: hovered ? "italic" : "normal",
-                  fontWeight: hovered ? 400 : 200,
-                  color: hovered ? "#8B816E" : "#4D5257",
-                  letterSpacing: hovered ? "-0.005em" : "-0.02em",
-                  transition: "color .35s ease",
-                }}>
-                  {p.last}
-                </span>
-              </span>
-
-              {/* Dotted spacer */}
-              <span
-                aria-hidden="true"
-                style={{
-                  height: "1em",
-                  alignSelf: "center",
-                  backgroundImage: "radial-gradient(circle, #CFCDC9 1.2px, transparent 1.5px)",
-                  backgroundSize: "9px 100%",
-                  backgroundRepeat: "repeat-x",
-                  backgroundPosition: "0 50%",
-                  minWidth: 80,
-                  display: "block",
-                }}
-              />
-
-              {/* Meta */}
-              <span style={{
-                fontFamily: "var(--font-ibm-plex-mono, monospace)",
-                fontSize: 11, letterSpacing: ".22em", textTransform: "uppercase",
-                color: "#A69885", whiteSpace: "nowrap", textAlign: "right",
-              }}>
-                {p.meta}
-              </span>
-
-              {/* Arrow */}
-              <span style={{
-                position: "relative",
-                display: "inline-block",
-                width: hovered ? 52 : 28,
-                height: 1,
-                background: "#4D5257",
-                transition: "width .45s cubic-bezier(.2,.8,.2,1)",
-                alignSelf: "center",
-                marginLeft: ".5rem",
-              }}>
-                <span style={{
-                  content: "",
-                  position: "absolute",
-                  right: 0, top: -4,
-                  width: 9, height: 9,
-                  borderTop: "1px solid #4D5257",
-                  borderRight: "1px solid #4D5257",
-                  transform: "rotate(45deg)",
-                  transformOrigin: "top right",
-                  display: "block",
-                }} />
-              </span>
-            </Link>
-          );
-        })}
-
-        {/* First row top border */}
-        <style>{`.pgrid-row:first-of-type { border-top: 1px solid #CFCDC9; }`}</style>
+                position: "absolute",
+                right: 0, top: -4,
+                width: 9, height: 9,
+                borderTop: "1px solid #4D5257",
+                borderRight: "1px solid #4D5257",
+                transform: "rotate(45deg)",
+                transformOrigin: "top right",
+                display: "block",
+              }} />
+            </span>
+          </Link>
+        ))}
       </div>
 
       {/* ── Footer row ── */}
@@ -329,9 +270,7 @@ export default function ProjectsGrid() {
         fontSize: 10, letterSpacing: ".22em", textTransform: "uppercase",
         color: "#A69885",
       }}>
-        <span>
-          Press <span style={{ color: "#4D5257" }}>P</span> to view the full archive
-        </span>
+        <span>Press <span style={{ color: "#4D5257" }}>P</span> to view the full archive</span>
         <Link
           href={`/${locale}/projects`}
           style={{
@@ -342,8 +281,7 @@ export default function ProjectsGrid() {
             borderBottom: "1px solid #4D5257",
             paddingBottom: 6,
           }}
-          className="pgrid-full-index"
-          data-cursor-label="All"
+          data-cursor-hover="All"
         >
           The Full Index
           <span style={{
@@ -351,7 +289,6 @@ export default function ProjectsGrid() {
             display: "inline-block",
             width: 22, height: 1,
             background: "#4D5257",
-            transition: "width .4s ease",
           }}>
             <span style={{
               position: "absolute", right: 0, top: -3,
@@ -366,8 +303,83 @@ export default function ProjectsGrid() {
       </div>
 
       <style>{`
+        /* Initial state — rows hidden until GSAP reveal */
         .pgrid-row { opacity: 0; }
-        .pgrid-full-index:hover span { width: 38px; }
+        .pgrid-row:first-of-type { border-top: 1px solid #CFCDC9; }
+
+        /* Big decorative number — background on hover */
+        .pgrid-bignum {
+          position: absolute;
+          left: -0.04em;
+          bottom: 0;
+          font-family: var(--font-open-sauce-one, sans-serif);
+          font-weight: 300;
+          font-size: clamp(140px, 20vw, 300px);
+          line-height: 0.82;
+          letter-spacing: -0.04em;
+          color: #BC7856;
+          opacity: 0;
+          pointer-events: none;
+          z-index: 0;
+          transition: opacity .55s ease;
+          user-select: none;
+        }
+        .pgrid-list:has(.pgrid-row[data-row="01"]:hover) .pgrid-bignum[data-for="01"],
+        .pgrid-list:has(.pgrid-row[data-row="02"]:hover) .pgrid-bignum[data-for="02"],
+        .pgrid-list:has(.pgrid-row[data-row="03"]:hover) .pgrid-bignum[data-for="03"] {
+          opacity: 0.07;
+        }
+
+        /* Preview container */
+        .pgrid-preview {
+          position: absolute;
+          top: 1.5rem;
+          right: calc(clamp(1.25rem, 3.2vw, 2.5rem) * -1);
+          width: 55vw;
+          max-width: 1100px;
+          height: calc(100% - 3rem);
+          pointer-events: none;
+          z-index: 1;
+          overflow: hidden;
+        }
+
+        /* Each pane: hidden via clip-path (left-to-right reveal) */
+        .pgrid-pane {
+          position: absolute;
+          inset: 0;
+          display: flex;
+          align-items: center;
+          justify-content: flex-end;
+          padding-right: clamp(1.25rem, 3.2vw, 2.5rem);
+          clip-path: inset(0 100% 0 0);
+          transition: clip-path .85s cubic-bezier(.2,.8,.2,1);
+          will-change: clip-path;
+        }
+
+        /* CSS :has() — reveal matching pane on row hover */
+        .pgrid-list:has(.pgrid-row[data-row="01"]:hover) .pgrid-pane[data-for="01"],
+        .pgrid-list:has(.pgrid-row[data-row="02"]:hover) .pgrid-pane[data-for="02"],
+        .pgrid-list:has(.pgrid-row[data-row="03"]:hover) .pgrid-pane[data-for="03"] {
+          clip-path: inset(0 0% 0 0);
+        }
+
+        /* Dim other rows when any is hovered */
+        .pgrid-list:has(.pgrid-row:hover) .pgrid-row:not(:hover) {
+          opacity: 0.35 !important;
+          transition: opacity .55s cubic-bezier(.2,.8,.2,1);
+        }
+
+        /* Hover accents on the hovered row */
+        .pgrid-row:hover .pgrid-diamond { color: #BC7856; }
+        .pgrid-row:hover .pgrid-rule    { background: #BC7856 !important; }
+        .pgrid-row:hover .pgrid-arrow   { width: 52px !important; transition: width .45s cubic-bezier(.2,.8,.2,1); }
+        .pgrid-row:hover .pgrid-last {
+          font-family: var(--font-forum, serif);
+          font-style: italic;
+          font-weight: 400;
+          color: #8B816E;
+          letter-spacing: -0.005em;
+        }
       `}</style>
     </section>
   );

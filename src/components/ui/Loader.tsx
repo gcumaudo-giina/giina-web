@@ -1,13 +1,27 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
+import Image from "next/image";
 
 export default function Loader() {
   const [done, setDone] = useState(false);
+  const [pct, setPct]   = useState(0);
+  const barRef          = useRef<HTMLSpanElement>(null);
 
   useEffect(() => {
-    const t = setTimeout(() => setDone(true), 1800);
-    return () => clearTimeout(t);
+    let p = 0;
+    const tick = () => {
+      p += Math.random() * 14 + 4;
+      if (p > 100) p = 100;
+      setPct(Math.floor(p));
+      if (barRef.current) barRef.current.style.transform = `scaleX(${p / 100})`;
+      if (p < 100) {
+        setTimeout(tick, 90 + Math.random() * 120);
+      } else {
+        setTimeout(() => setDone(true), 380);
+      }
+    };
+    setTimeout(tick, 200);
   }, []);
 
   return (
@@ -29,18 +43,28 @@ export default function Loader() {
       }}
     >
       <div />
+
       <div>
-        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-end", paddingBottom: "1.5rem" }}>
-          <span style={{
-            fontFamily: "var(--font-open-sauce-one, sans-serif)",
-            fontWeight: 200,
-            fontSize: "clamp(60px, 14vw, 220px)",
-            letterSpacing: "-0.04em",
-            lineHeight: 0.85,
-            color: "#4D5257",
-          }}>
-            GIINA
-          </span>
+        {/* Mark + meta row */}
+        <div style={{
+          display: "flex",
+          justifyContent: "space-between",
+          alignItems: "flex-end",
+          paddingBottom: "1.5rem",
+        }}>
+          <Image
+            src="/brand/giina-mark-black.png"
+            alt="GIINA"
+            width={680}
+            height={680}
+            priority
+            style={{
+              width: "clamp(44px, 5.5vw, 72px)",
+              height: "auto",
+              display: "block",
+              opacity: 0.85,
+            }}
+          />
           <div style={{
             fontFamily: "var(--font-ibm-plex-mono, monospace)",
             fontSize: 10,
@@ -48,25 +72,30 @@ export default function Loader() {
             textTransform: "uppercase",
             color: "#A69885",
             textAlign: "right",
-            lineHeight: 1.8,
+            lineHeight: 1.85,
           }}>
-            <div>The Design Atelier</div>
+            <div style={{ color: "#4D5257" }}>The Design Atelier</div>
             <div style={{ color: "#BC7856" }}>◆ Marbella · ES</div>
           </div>
         </div>
 
-        {/* Progress bar — pure CSS animation */}
+        {/* Progress bar */}
         <div style={{ height: 1, background: "#CFCDC9", position: "relative" }}>
-          <span style={{
-            position: "absolute",
-            inset: 0,
-            background: "#4D5257",
-            transformOrigin: "left center",
-            display: "block",
-            animation: "loader-fill 1.4s cubic-bezier(0.4, 0, 0.2, 1) forwards",
-          }} />
+          <span
+            ref={barRef}
+            style={{
+              position: "absolute",
+              inset: 0,
+              background: "#4D5257",
+              transformOrigin: "left center",
+              transform: "scaleX(0)",
+              display: "block",
+              transition: "transform 0.2s linear",
+            }}
+          />
         </div>
 
+        {/* Label + counter */}
         <div style={{
           display: "flex",
           justifyContent: "space-between",
@@ -78,9 +107,13 @@ export default function Loader() {
           color: "#A69885",
         }}>
           <span>Loading the atelier</span>
-          <span style={{ color: "#4D5257" }}>◆</span>
+          <span>
+            <span style={{ color: "#4D5257" }}>{String(pct).padStart(3, "0")}</span>
+            {" / 100"}
+          </span>
         </div>
       </div>
+
       <div />
     </div>
   );

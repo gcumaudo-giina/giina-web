@@ -2,96 +2,63 @@
 
 import { useLocale } from "next-intl";
 import Link from "next/link";
+import { useEffect, useState } from "react";
 
 const socials = [
-  { label: "Instagram", href: "https://www.instagram.com/giinadesign/" },
-  { label: "Pinterest",  href: "https://www.pinterest.com/giinadesign/"  },
-  { label: "LinkedIn",   href: "https://www.linkedin.com/company/giinadesign/" },
+  { label: "@giinadesign ↗", href: "https://www.instagram.com/giinadesign/" },
+  { label: "Pinterest ↗",    href: "https://www.pinterest.com/giinadesign/"  },
+  { label: "Journal ↗",      href: "#"                                        },
 ];
+
+function LiveTime() {
+  const [time, setTime] = useState("");
+  useEffect(() => {
+    const update = () => {
+      setTime(new Date().toLocaleTimeString("en-GB", {
+        timeZone: "Europe/Madrid",
+        hour: "2-digit", minute: "2-digit", second: "2-digit",
+      }));
+    };
+    update();
+    const id = setInterval(update, 1000);
+    return () => clearInterval(id);
+  }, []);
+  return <>{time}</>;
+}
 
 export default function Footer() {
   const locale = useLocale();
-  const year   = new Date().getFullYear();
 
   return (
     <footer style={{ background: "#F7F6F4", borderTop: "1px solid #CFCDC9" }}>
 
-      {/* Big GIINA wordmark row */}
-      <div style={{
-        padding: "clamp(3rem, 7vh, 5rem) clamp(1.25rem, 3.2vw, 2.5rem) 0",
-        display: "flex",
-        alignItems: "flex-end",
-        justifyContent: "space-between",
-        gap: "2rem",
-      }}>
-        <span style={{
-          fontFamily: "var(--font-open-sauce-one, sans-serif)",
-          fontWeight: 200,
-          fontSize: "clamp(56px, 11vw, 160px)",
-          letterSpacing: "-0.04em",
-          lineHeight: 0.85,
-          color: "#4D5257",
-          userSelect: "none",
-        }}>
-          GIINA
-        </span>
-
-        <div style={{
-          fontFamily: "var(--font-ibm-plex-mono, monospace)",
-          fontSize: 10,
-          letterSpacing: ".22em",
-          textTransform: "uppercase",
-          color: "#A69885",
-          textAlign: "right",
-          lineHeight: 1.7,
-          paddingBottom: "0.4rem",
-        }}>
-          <span style={{ color: "#BC7856" }}>◆</span><br />
-          Design Atelier<br />
-          Marbella · ES
-        </div>
-      </div>
-
-      {/* Terracotta divider */}
-      <div style={{ height: 1, background: "#BC7856", opacity: 0.45, margin: "clamp(2rem, 4vh, 3rem) clamp(1.25rem, 3.2vw, 2.5rem) 0" }} />
-
-      {/* 4-column info grid */}
+      {/* ── 4-column info grid ── */}
       <div style={{
         display: "grid",
-        gridTemplateColumns: "repeat(auto-fit, minmax(160px, 1fr))",
+        gridTemplateColumns: "2fr 1fr 1fr 1fr",
         gap: "clamp(2rem, 4vw, 3.5rem)",
         padding: "clamp(2rem, 4vh, 3rem) clamp(1.25rem, 3.2vw, 2.5rem)",
       }}>
 
         {/* Atelier */}
         <div>
-          <p style={{ fontFamily: "var(--font-ibm-plex-mono, monospace)", fontSize: 9, letterSpacing: ".22em", textTransform: "uppercase", color: "#BC7856", marginBottom: ".8rem" }}>
-            Atelier
-          </p>
-          <p style={{ fontFamily: "var(--font-ibm-plex-sans, sans-serif)", fontWeight: 300, fontSize: 12, lineHeight: 1.8, color: "#8B816E" }}>
-            Marbella · Málaga<br />
+          <p style={labelStyle}>Atelier</p>
+          <p style={textStyle}>
+            Calle Camino del Cielo 7<br />
+            29602 Marbella · Málaga<br />
             España
           </p>
+          <p style={{ ...textStyle, marginTop: "1rem" }}>By appointment only.</p>
         </div>
 
         {/* Contact */}
         <div>
-          <p style={{ fontFamily: "var(--font-ibm-plex-mono, monospace)", fontSize: 9, letterSpacing: ".22em", textTransform: "uppercase", color: "#BC7856", marginBottom: ".8rem" }}>
-            Contact
-          </p>
-          <div style={{ fontFamily: "var(--font-ibm-plex-sans, sans-serif)", fontWeight: 300, fontSize: 12, lineHeight: 1.8, color: "#8B816E" }}>
-            <a
-              href="mailto:gcumaudo@giinadesign.com"
-              style={{ color: "inherit", display: "block" }}
-              className="footer-link"
-            >
-              gcumaudo@giinadesign.com
+          <p style={labelStyle}>Contact</p>
+          <div style={textStyle}>
+            <a href="mailto:studio@giinadesign.com" style={linkStyle} className="foot-link">
+              studio@giinadesign.com
             </a>
-            <Link
-              href={`/${locale}/contact`}
-              style={{ color: "inherit", display: "block" }}
-              className="footer-link"
-            >
+            <Link href={`/${locale}/contact`} style={linkStyle} className="foot-link">
               Send a message →
             </Link>
           </div>
@@ -99,18 +66,16 @@ export default function Footer() {
 
         {/* Follow */}
         <div>
-          <p style={{ fontFamily: "var(--font-ibm-plex-mono, monospace)", fontSize: 9, letterSpacing: ".22em", textTransform: "uppercase", color: "#BC7856", marginBottom: ".8rem" }}>
-            Follow
-          </p>
-          <div style={{ fontFamily: "var(--font-ibm-plex-sans, sans-serif)", fontWeight: 300, fontSize: 12, lineHeight: 1.8, color: "#8B816E" }}>
+          <p style={labelStyle}>Follow</p>
+          <div style={textStyle}>
             {socials.map((s) => (
               <a
                 key={s.label}
                 href={s.href}
                 target="_blank"
                 rel="noopener noreferrer"
-                style={{ color: "inherit", display: "block" }}
-                className="footer-link"
+                style={linkStyle}
+                className="foot-link"
               >
                 {s.label}
               </a>
@@ -118,20 +83,21 @@ export default function Footer() {
           </div>
         </div>
 
-        {/* Hours */}
+        {/* Atelier Hours */}
         <div>
-          <p style={{ fontFamily: "var(--font-ibm-plex-mono, monospace)", fontSize: 9, letterSpacing: ".22em", textTransform: "uppercase", color: "#BC7856", marginBottom: ".8rem" }}>
-            Hours
-          </p>
-          <p style={{ fontFamily: "var(--font-ibm-plex-sans, sans-serif)", fontWeight: 300, fontSize: 12, lineHeight: 1.8, color: "#8B816E" }}>
-            Mon – Fri · 9:00–18:00<br />
-            Sat · By appointment
+          <p style={labelStyle}>Atelier Hours</p>
+          <p style={textStyle}>
+            Mon — Fri<br />
+            10:00 — 18:30 CET<br />
+            <span style={{ color: "#BC7856" }}>●</span>{" "}
+            <span style={{ fontFamily: "var(--font-ibm-plex-mono, monospace)", fontSize: 11, letterSpacing: ".1em" }}>
+              <LiveTime />
+            </span>
           </p>
         </div>
-
       </div>
 
-      {/* Bottom legal bar */}
+      {/* ── Bottom legal bar ── */}
       <div style={{
         borderTop: "1px solid #CFCDC9",
         padding: "1.2rem clamp(1.25rem, 3.2vw, 2.5rem)",
@@ -146,14 +112,55 @@ export default function Footer() {
         textTransform: "uppercase",
         color: "#A69885",
       }}>
-        <span>© {year} Giina Design SL · NIF B22612055</span>
-        <span style={{ opacity: 0.6 }}>All rights reserved</span>
+        <span>© MMXXVI · Giina Design — All Rights Reserved</span>
+        <div style={{ display: "flex", gap: "1.5rem" }}>
+          {["Privacy", "Imprint", "Cookies"].map((l) => (
+            <Link key={l} href="#" style={{ color: "inherit" }} className="foot-link">{l}</Link>
+          ))}
+          <span>Build · 2026.05</span>
+        </div>
       </div>
 
       <style>{`
-        .footer-link { transition: color 0.3s ease; }
-        .footer-link:hover { color: #4D5257 !important; }
+        .foot-link { transition: color 0.3s ease; }
+        .foot-link:hover { color: #BC7856 !important; }
+        @media (max-width: 880px) {
+          footer > div:nth-child(4) {
+            grid-template-columns: 1fr 1fr !important;
+          }
+        }
+        @media (max-width: 560px) {
+          footer > div:nth-child(4) {
+            grid-template-columns: 1fr !important;
+          }
+        }
       `}</style>
     </footer>
   );
 }
+
+const labelStyle: React.CSSProperties = {
+  fontFamily: "var(--font-ibm-plex-mono, monospace)",
+  fontSize: 10,
+  letterSpacing: ".22em",
+  textTransform: "uppercase",
+  color: "#BC7856",
+  marginBottom: ".9rem",
+  paddingTop: ".5rem",
+  borderTop: "1px solid transparent",
+  position: "relative",
+};
+
+const textStyle: React.CSSProperties = {
+  fontFamily: "var(--font-ibm-plex-sans, sans-serif)",
+  fontWeight: 300,
+  fontSize: 14,
+  lineHeight: 1.7,
+  color: "#4D5257",
+};
+
+const linkStyle: React.CSSProperties = {
+  color: "inherit",
+  display: "block",
+  textDecoration: "none",
+};

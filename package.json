@@ -4,26 +4,31 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
+    "diagnose:local": "powershell -ExecutionPolicy Bypass -File scripts/diagnose-local.ps1",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint"
+    "lint": "eslint",
+    "pm2:start": "pm2 start ecosystem.config.cjs",
+    "pm2:restart": "pm2 restart giina-web"
   },
   "dependencies": {
+    "@fontsource/open-sauce-one": "^5.2.5",
     "@gsap/react": "^2.1.2",
     "@sanity/client": "^7.22.0",
     "@sanity/image-url": "^2.1.1",
     "@sanity/vision": "^5.25.1",
+    "clsx": "^2.1.1",
     "framer-motion": "^12.38.0",
     "gsap": "^3.15.0",
     "next": "16.2.6",
     "next-intl": "^4.12.0",
     "next-sanity": "^12.4.5",
-    "next-sitemap": "^4.2.3",
     "react": "19.2.4",
     "react-dom": "19.2.4",
     "resend": "^6.12.3",
     "sanity": "^5.25.1",
-    "sharp": "^0.34.5"
+    "sharp": "^0.34.5",
+    "tailwind-merge": "^3.6.0"
   },
   "devDependencies": {
     "@tailwindcss/postcss": "^4",
@@ -32,6 +37,7 @@
     "@types/react-dom": "^19",
     "eslint": "^9",
     "eslint-config-next": "16.2.6",
+    "next-sitemap": "^4.2.3",
     "tailwindcss": "^4",
     "typescript": "^5"
   }

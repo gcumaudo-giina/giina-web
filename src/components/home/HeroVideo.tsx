@@ -2,12 +2,11 @@
 
 import { useEffect, useRef } from "react";
 import { gsap } from "gsap";
-
-const LETTERS = ["G", "I", "I", "N", "A"];
+import Image from "next/image";
 
 export default function HeroVideo() {
   const containerRef = useRef<HTMLDivElement>(null);
-  const lettersRef   = useRef<(HTMLSpanElement | null)[]>([]);
+  const markRef      = useRef<HTMLAnchorElement>(null);
   const topRef       = useRef<HTMLDivElement>(null);
   const bottomRef    = useRef<HTMLDivElement>(null);
   const scanRef      = useRef<HTMLDivElement>(null);
@@ -15,7 +14,6 @@ export default function HeroVideo() {
 
   useEffect(() => {
     const ctx = gsap.context(() => {
-      const letters = lettersRef.current.filter(Boolean);
 
       // Scan line — single sweep on load
       gsap.fromTo(scanRef.current,
@@ -29,17 +27,10 @@ export default function HeroVideo() {
         { opacity: 1, duration: 1, delay: 0.3 }
       );
 
-      // GIINA letters — stagger rise
-      gsap.fromTo(letters,
-        { opacity: 0, y: "46%" },
-        {
-          opacity: 1,
-          y: 0,
-          duration: 0.9,
-          stagger: 0.12,
-          delay: 0.5,
-          ease: "cubic-bezier(0.2, 0.8, 0.2, 1)",
-        }
+      // GIINA wordmark — rise + fade
+      gsap.fromTo(markRef.current,
+        { opacity: 0, y: "3%" },
+        { opacity: 1, y: 0, duration: 1.1, delay: 0.5, ease: "power3.out" }
       );
 
       // Bottom row
@@ -101,7 +92,6 @@ export default function HeroVideo() {
         }}
       />
 
-      {/* Video slot — add Cloudinary src when ready */}
       <video
         autoPlay muted loop playsInline
         aria-hidden="true"
@@ -112,7 +102,9 @@ export default function HeroVideo() {
           zIndex: 1,
           opacity: 0.75,
         }}
-      />
+      >
+        <source src="/videos/hero-cut.mp4" type="video/mp4" />
+      </video>
 
       {/* Vignette */}
       <div style={{
@@ -151,31 +143,29 @@ export default function HeroVideo() {
           </div>
         </div>
 
-        {/* Center — GIINA wordmark letter by letter */}
+        {/* Center — GIINA wordmark image */}
         <div style={{ alignSelf: "center", display: "flex", justifyContent: "center" }}>
-          <h1
-            aria-label="GIINA"
+          <a
+            ref={markRef}
+            href="#projects"
+            aria-label="GIINA — The Design Atelier"
+            data-cursor-hover="Explore"
             style={{
-              fontFamily: "var(--font-open-sauce-one, sans-serif)",
-              fontWeight: 200,
-              fontSize: "clamp(120px, 28vw, 460px)",
-              lineHeight: 0.82,
-              letterSpacing: "-0.04em",
-              color: "#F7F6F4",
-              whiteSpace: "nowrap",
-              overflow: "hidden",
+              display: "block",
+              width: "min(48vw, 56vh, 680px)",
+              maxWidth: "88%",
+              opacity: 0,
             }}
           >
-            {LETTERS.map((letter, i) => (
-              <span
-                key={i}
-                ref={(el) => { lettersRef.current[i] = el; }}
-                style={{ display: "inline-block", opacity: 0 }}
-              >
-                {letter}
-              </span>
-            ))}
-          </h1>
+            <Image
+              src="/brand/giina-mark-white.png"
+              alt="GIINA"
+              width={680}
+              height={680}
+              style={{ width: "100%", height: "auto", display: "block" }}
+              priority
+            />
+          </a>
         </div>
 
         {/* Bottom row */}

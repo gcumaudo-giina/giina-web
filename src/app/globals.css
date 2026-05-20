@@ -32,6 +32,14 @@
   --col-edge:               clamp(1.25rem, 3.2vw, 2.5rem);
 }
 
+/* Offline-safe font stacks. Real brand fonts can be self-hosted here later. */
+:root {
+  --font-open-sauce-one: 'Open Sauce One', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  --font-forum: Georgia, 'Times New Roman', serif;
+  --font-ibm-plex-sans: 'Segoe UI', Arial, Helvetica, sans-serif;
+  --font-ibm-plex-mono: 'Cascadia Mono', Consolas, 'Courier New', monospace;
+}
+
 /* ─── Base styles ────────────────────────────────────────────────────── */
 *, *::before, *::after {
   box-sizing: border-box;
@@ -118,11 +126,22 @@ a, button, [role="button"] {
 /* ─── Chapter lines (StudioChapter) ─────────────────────────────────── */
 .chapter-line {
   color: #CFCDC9;
-  transition: color 0.8s ease;
+  opacity: 0.22;
+  filter: blur(3px);
+  transform: translateY(8px);
+  transition:
+    color       0.9s ease,
+    opacity     0.9s ease,
+    filter      1.1s cubic-bezier(0.2, 0.8, 0.2, 1),
+    transform   0.9s cubic-bezier(0.2, 0.8, 0.2, 1);
+  will-change: filter, opacity, transform;
 }
 
 .chapter-line.is-active {
   color: #4D5257;
+  opacity: 1;
+  filter: blur(0px);
+  transform: translateY(0);
 }
 
 .chapter-line em {
@@ -130,7 +149,7 @@ a, button, [role="button"] {
   font-style: italic;
   font-weight: 400;
   color: #8B816E;
-  transition: color 0.8s ease;
+  transition: color 0.9s ease;
 }
 
 .chapter-line.is-active em {
@@ -156,4 +175,8 @@ a, button, [role="button"] {
 @keyframes loader-fill {
   from { transform: scaleX(0); }
   to   { transform: scaleX(1); }
+}
+
+@keyframes spin-slow {
+  to { transform: rotate(360deg); }
 }

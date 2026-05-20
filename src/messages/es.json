@@ -10,28 +10,56 @@
   "studio_chapter": {
     "label": "El Atelier",
     "headline": "Haciendo el diseño trascendente.",
-    "body": "Creemos que los espacios no solo se ven, se sienten. Cada proyecto es una conversación entre la materialidad, la luz y las personas que los habitan."
+    "body": "Creemos que los espacios no solo se ven, se sienten. Cada proyecto es una conversación entre la materialidad, la luz y las personas que los habitan.",
+    "chapter": "Capítulo I",
+    "philosophy": "La Filosofía",
+    "note": "Creemos que un interior no se decora, se compone. Cada medida, cada material, cada sombra elegida por la manera en que permite que el espacio respire.",
+    "author": "Por Gina Marchiori",
+    "role": "Directora · Fundadora",
+    "lines": [
+      { "text": "Un espacio que", "em": "escucha." },
+      { "text": "Materiales antes que", "em": "momentos." },
+      { "text": "La luz es el primer", "em": "acabado." },
+      { "text": "La contención, el gesto más", "em": "elocuente." }
+    ]
   },
   "services": {
     "label": "Servicios",
     "items": {
       "concept": {
         "title": "Concepto y Diseño Estético",
-        "description": "Visión espacial completa, moodboards y dirección creativa."
+        "description": "Ambiente, materiales, paleta. El primer gesto considerado de un futuro espacio."
       },
       "technical": {
         "title": "Desarrollo Técnico",
-        "description": "Planos, detalles constructivos y documentación técnica."
+        "description": "Planos, detalles, especificaciones. La arquitectura de la precisión."
       },
       "selection": {
         "title": "Selección y Suministro",
-        "description": "Curaduría y aprovisionamiento de mobiliario, materiales y acabados."
+        "description": "Cada objeto elegido. Cada acabado buscado. Nada dejado al azar."
       },
       "coordination": {
         "title": "Coordinación de Obras",
-        "description": "Gestión en obra para garantizar la ejecución de la visión final."
+        "description": "En obra, desde el primer clavo hasta el último toque. El atelier nunca se va."
       }
     }
+  },
+  "practice": {
+    "pill": "Práctica — 04 Disciplinas",
+    "headline_pre": "Desde la primera",
+    "headline_em1": "idea,",
+    "headline_mid": "hasta el último",
+    "headline_em2": "detalle.",
+    "body": "Una práctica integrada — comenzamos con el lugar y terminamos con las personas que lo habitan. Cada proyecto atraviesa las mismas cuatro conversaciones."
+  },
+  "begin": {
+    "label": "Comenzar",
+    "appointment": "Con cita previa",
+    "location": "Marbella, ES",
+    "headline_1": "Creemos algo",
+    "headline_em": "trascendente",
+    "headline_2": "juntos.",
+    "email": "studio@giinadesign.com"
   },
   "projects": {
     "label": "Trabajos seleccionados",

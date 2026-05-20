@@ -10,28 +10,56 @@
   "studio_chapter": {
     "label": "The Atelier",
     "headline": "Making Design Transcendent.",
-    "body": "We believe spaces are not just seen — they are felt. Every project is a conversation between materiality, light, and the people who live within it."
+    "body": "We believe spaces are not just seen — they are felt. Every project is a conversation between materiality, light, and the people who live within it.",
+    "chapter": "Chapter I",
+    "philosophy": "The Philosophy",
+    "note": "We believe an interior is not decorated — it is composed. Each measure, each material, each shadow chosen for the way it lets a space breathe.",
+    "author": "By Gina Marchiori",
+    "role": "Director · Founder",
+    "lines": [
+      { "text": "A space that", "em": "listens." },
+      { "text": "Materials before", "em": "moments." },
+      { "text": "Light is the first", "em": "finish." },
+      { "text": "Restraint, the loudest", "em": "gesture." }
+    ]
   },
   "services": {
     "label": "Services",
     "items": {
       "concept": {
         "title": "Concept & Aesthetic Design",
-        "description": "Full spatial vision, moodboards and creative direction."
+        "description": "Mood, materials, palette. The first considered gesture of a future space."
       },
       "technical": {
         "title": "Technical Development",
-        "description": "Floor plans, construction details and technical documentation."
+        "description": "Drawings, details, specifications. The architecture of precision."
       },
       "selection": {
         "title": "Selection & Supply",
-        "description": "Curation and sourcing of furniture, materials and finishes."
+        "description": "Every object chosen. Every finish sourced. Nothing left to chance."
       },
       "coordination": {
         "title": "Works Coordination",
-        "description": "On-site management to ensure the final vision is executed."
+        "description": "On site, from first fix to final touch. The atelier never leaves."
       }
     }
+  },
+  "practice": {
+    "pill": "Practice — 04 Disciplines",
+    "headline_pre": "From the first",
+    "headline_em1": "idea,",
+    "headline_mid": "to the last",
+    "headline_em2": "detail.",
+    "body": "An integrated practice — we begin with the place and end with the people who live in it. Every project moves through the same four conversations."
+  },
+  "begin": {
+    "label": "Begin",
+    "appointment": "By Appointment",
+    "location": "Marbella, ES",
+    "headline_1": "Let's create something",
+    "headline_em": "transcendent",
+    "headline_2": "together.",
+    "email": "studio@giinadesign.com"
   },
   "projects": {
     "label": "Selected Work",

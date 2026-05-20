@@ -1,8 +1,9 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { Fragment, useEffect, useRef, useState } from "react";
 import { notFound, useParams } from "next/navigation";
 import Link from "next/link";
+import Image from "next/image";
 import { useLocale } from "next-intl";
 import { getProject, getNextProject } from "@/lib/projects";
 
@@ -17,9 +18,11 @@ export default function ProjectPage() {
   return (
     <main>
       <S1Hero project={project} />
-      <S2Specs project={project} />
-      <S3Gallery project={project} />
-      {next && <S4NextProject next={next} locale={locale} />}
+      {project.spread && <S2Spread project={project} />}
+      <S3Specs project={project} />
+      <S4Gallery project={project} />
+      {project.drawings && project.drawings.length > 0 && <S5Drawings project={project} />}
+      {next && <S6NextProject next={next} locale={locale} />}
     </main>
   );
 }
@@ -224,8 +227,101 @@ function S1Hero({ project }: { project: ReturnType<typeof getProject> & {} }) {
   );
 }
 
-/* ─── S2 — Specs · Quote · Materials ─────────────────────────────────── */
-function S2Specs({ project }: { project: ReturnType<typeof getProject> & {} }) {
+/* ─── S2 — Moodboard spread ───────────────────────────────────────────── */
+function S2Spread({ project }: { project: ReturnType<typeof getProject> & {} }) {
+  if (!project.spread) return null;
+  const { primary, secondary, quote } = project.spread;
+
+  return (
+    <section style={{
+      background: "#0f0e0c",
+      display:    "grid",
+      gridTemplateColumns: "1fr 1fr",
+      height: "100vh",
+      overflow: "hidden",
+    }}>
+      {/* Left — primary moodboard image */}
+      <div style={{ position: "relative", overflow: "hidden" }}>
+        <Image
+          src={primary}
+          alt={`${project.titleFirst} ${project.titleLast} — moodboard`}
+          fill
+          sizes="50vw"
+          style={{ objectFit: "cover" }}
+        />
+      </div>
+
+      {/* Right — secondary image + text */}
+      <div style={{
+        display:        "flex",
+        flexDirection:  "column",
+        overflow:       "hidden",
+      }}>
+        {/* Secondary image — top 55% */}
+        <div style={{ position: "relative", flex: "0 0 55%" }}>
+          <Image
+            src={secondary}
+            alt={`${project.titleFirst} ${project.titleLast} — detail`}
+            fill
+            sizes="50vw"
+            style={{ objectFit: "cover" }}
+          />
+        </div>
+
+        {/* Text block — bottom 45% */}
+        <div style={{
+          flex:          "0 0 45%",
+          background:    "#0f0e0c",
+          padding:       "3rem clamp(2rem, 4vw, 4rem)",
+          display:       "flex",
+          flexDirection: "column",
+          justifyContent: "center",
+          gap:           "1.5rem",
+        }}>
+          <span style={{
+            fontFamily:    "var(--font-ibm-plex-mono, monospace)",
+            fontSize:      10,
+            letterSpacing: ".22em",
+            textTransform: "uppercase",
+            color:         "#A69885",
+          }}>
+            {project.location} · {project.year}
+          </span>
+
+          <p style={{
+            fontFamily: "var(--font-forum, serif)",
+            fontStyle:  "italic",
+            fontSize:   "clamp(18px, 1.6vw, 22px)",
+            lineHeight: 1.55,
+            color:      "rgba(247,246,244,.75)",
+            maxWidth:   "22ch",
+          }}>
+            &ldquo;{quote}&rdquo;
+          </p>
+
+          <div style={{ display: "flex", gap: "8px", flexWrap: "wrap" }}>
+            {project.materials.slice(0, 3).map((mat) => (
+              <span key={mat} style={{
+                fontFamily:    "var(--font-ibm-plex-mono, monospace)",
+                fontSize:      9,
+                letterSpacing: ".18em",
+                textTransform: "uppercase",
+                color:         "#8B816E",
+                border:        "1px solid rgba(139,129,110,.35)",
+                padding:       "5px 10px",
+              }}>
+                {mat}
+              </span>
+            ))}
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+/* ─── S3 — Specs · Quote · Materials ─────────────────────────────────── */
+function S3Specs({ project }: { project: ReturnType<typeof getProject> & {} }) {
   return (
     <section style={{
       background: "#F7F6F4",
@@ -258,7 +354,7 @@ function S2Specs({ project }: { project: ReturnType<typeof getProject> & {} }) {
               { t: "Scope",   v: project.scope,   em: false },
               { t: "Status",  v: project.status,  em: project.status === "In Works" },
             ].map(({ t, v, em }) => (
-              <>
+              <Fragment key={t}>
                 <dt key={`dt-${t}`} style={{
                   fontFamily: "var(--font-ibm-plex-mono, monospace)",
                   fontSize: 9, letterSpacing: ".22em", textTransform: "uppercase",
@@ -274,7 +370,7 @@ function S2Specs({ project }: { project: ReturnType<typeof getProject> & {} }) {
                 }}>
                   {v}
                 </dd>
-              </>
+              </Fragment>
             ))}
           </dl>
         </div>
@@ -327,8 +423,8 @@ function S2Specs({ project }: { project: ReturnType<typeof getProject> & {} }) {
   );
 }
 
-/* ─── S3 — Gallery ────────────────────────────────────────────────────── */
-function S3Gallery({ project }: { project: ReturnType<typeof getProject> & {} }) {
+/* ─── S4 — Gallery ────────────────────────────────────────────────────── */
+function S4Gallery({ project }: { project: ReturnType<typeof getProject> & {} }) {
   return (
     <section style={{
       background: "#F7F6F4",
@@ -341,7 +437,6 @@ function S3Gallery({ project }: { project: ReturnType<typeof getProject> & {} })
       }}>
         {project.gallery.map((frame, i) => (
           <figure key={i}>
-            {/* Frame with warm gradient placeholder */}
             <div style={{
               position: "relative",
               aspectRatio: "16 / 9",
@@ -353,7 +448,15 @@ function S3Gallery({ project }: { project: ReturnType<typeof getProject> & {} })
               `,
               overflow: "hidden",
             }}>
-              {/* Tag */}
+              {frame.src && (
+                <Image
+                  src={frame.src}
+                  alt={frame.label}
+                  fill
+                  sizes="(max-width: 1440px) 100vw, 1440px"
+                  style={{ objectFit: "cover" }}
+                />
+              )}
               <span style={{
                 position: "absolute", top: "1rem", left: "1rem",
                 fontFamily: "var(--font-ibm-plex-mono, monospace)",
@@ -386,8 +489,86 @@ function S3Gallery({ project }: { project: ReturnType<typeof getProject> & {} })
   );
 }
 
-/* ─── S4 — Next project CTA ───────────────────────────────────────────── */
-function S4NextProject({ next, locale }: { next: ReturnType<typeof getProject> & {}; locale: string }) {
+/* ─── S5 — Drawings & Plans ───────────────────────────────────────────── */
+function S5Drawings({ project }: { project: ReturnType<typeof getProject> & {} }) {
+  const drawings = project.drawings;
+  if (!drawings || drawings.length === 0) return null;
+
+  return (
+    <section style={{
+      background: "#F7F6F4",
+      padding:    "clamp(4rem, 8vh, 8rem) clamp(1.25rem, 3.2vw, 2.5rem)",
+    }}>
+      <div style={{ maxWidth: 1440, margin: "0 auto" }}>
+        {/* Section label */}
+        <div style={{
+          display:       "flex",
+          alignItems:    "center",
+          gap:           "16px",
+          marginBottom:  "clamp(2.5rem, 5vh, 5rem)",
+        }}>
+          <span style={{
+            width: 28, height: 1, background: "#BC7856", display: "block", flexShrink: 0,
+          }} />
+          <span style={{
+            fontFamily:    "var(--font-ibm-plex-mono, monospace)",
+            fontSize:      10,
+            letterSpacing: ".22em",
+            textTransform: "uppercase",
+            color:         "#A69885",
+          }}>
+            Drawings & Plans
+          </span>
+        </div>
+
+        {/* Drawings grid — 2 columns, alternating clip-path wipe direction */}
+        <div style={{
+          display:             "grid",
+          gridTemplateColumns: "repeat(2, 1fr)",
+          gap:                 "clamp(1rem, 2vw, 2rem)",
+        }}>
+          {drawings.map((drawing, i) => (
+            <figure key={drawing.src}>
+              <div
+                style={{
+                  position:    "relative",
+                  aspectRatio: "4/3",
+                  background:  "#E8E6E2",
+                  overflow:    "hidden",
+                }}
+              >
+                <Image
+                  src={drawing.src}
+                  alt={drawing.label}
+                  fill
+                  sizes="(max-width: 1440px) 50vw, 720px"
+                  style={{ objectFit: "contain", padding: "2rem" }}
+                />
+              </div>
+              <figcaption style={{
+                marginTop:     "0.8rem",
+                display:       "flex",
+                justifyContent: "space-between",
+                alignItems:    "baseline",
+                fontFamily:    "var(--font-ibm-plex-mono, monospace)",
+                fontSize:      10,
+                letterSpacing: ".22em",
+                textTransform: "uppercase",
+                color:         "#A69885",
+              }}>
+                <span>{drawing.label}</span>
+                <span style={{ color: "#8B816E" }}>{drawing.type}</span>
+              </figcaption>
+            </figure>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+}
+
+/* ─── S6 — Next project CTA ───────────────────────────────────────────── */
+function S6NextProject({ next, locale }: { next: ReturnType<typeof getProject> & {}; locale: string }) {
   const [hovered, setHovered] = useState(false);
 
   return (
