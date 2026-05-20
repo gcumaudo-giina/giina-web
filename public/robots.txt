@@ -1,0 +1,14 @@
+# *
+User-agent: *
+Allow: /
+
+# *
+User-agent: *
+Disallow: /studio
+Disallow: /api
+
+# Host
+Host: https://giinadesign.com
+
+# Sitemaps
+Sitemap: https://giinadesign.com/sitemap.xml

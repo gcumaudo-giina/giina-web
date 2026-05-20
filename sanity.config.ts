@@ -1,6 +1,5 @@
 import { defineConfig } from "sanity";
 import { structureTool } from "sanity/structure";
-import { visionTool } from "@sanity/vision";
 import { projectSchema } from "./src/sanity/schemas/project";
 import { settingsSchema } from "./src/sanity/schemas/settings";
 import { studioSchema } from "./src/sanity/schemas/studio";
@@ -32,7 +31,6 @@ export default defineConfig({
               .child(S.document().schemaType("settings").documentId("site-settings")),
           ]),
     }),
-    visionTool(),
   ],
   schema: {
     types: [projectSchema, settingsSchema, studioSchema],
