@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Giina Design — Coming Soon</title>
+  <link rel="icon" type="image/png" href="brand/giina-mark-white.png">
+  <meta name="description" content="Estudio de diseño de interiores de lujo. Próximamente en giinadesign.com — Mijas, España.">
+  <meta name="robots" content="index, follow">
+  <link rel="canonical" href="https://giinadesign.com">
+
+  <!-- Open Graph -->
+  <meta property="og:title" content="Giina Design — Coming Soon">
+  <meta property="og:description" content="Estudio de diseño de interiores de lujo. Próximamente — Mijas, España.">
+  <meta property="og:url" content="https://giinadesign.com">
+  <meta property="og:type" content="website">
+  <meta property="og:image" content="https://giinadesign.com/brand/og-preview.jpg">
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400&family=DM+Mono:ital,wght@0,300;0,400;1,300&display=swap" rel="stylesheet">
+
+  <!-- Google Analytics 4 — reemplazar G-XXXXXXXXXX con tu Measurement ID -->
+  <!--
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-XXXXXXXXXX"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-XXXXXXXXXX');
+  </script>
+  -->
+
+  <style>
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    :root {
+      --white-warm: #f5f0eb;
+      --white-mid: rgba(245, 240, 235, 0.55);
+      --white-dim: rgba(245, 240, 235, 0.35);
+    }
+
+    html, body {
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+      background: #080808;
+    }
+
+    /* ── VIDEO BACKGROUND ── */
+    .video-bg {
+      position: fixed;
+      inset: 0;
+      z-index: 0;
+    }
+
+    .video-bg video {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    /* ── OVERLAYS ── */
+    .overlay-dark {
+      position: fixed;
+      inset: 0;
+      z-index: 1;
+      background: rgba(0, 0, 0, 0.48);
+    }
+
+    .overlay-scanlines {
+      position: fixed;
+      inset: 0;
+      z-index: 2;
+      background: repeating-linear-gradient(
+        to bottom,
+        transparent,
+        transparent 2px,
+        rgba(0, 0, 0, 0.045) 2px,
+        rgba(0, 0, 0, 0.045) 4px
+      );
+      pointer-events: none;
+    }
+
+    /* ── MAIN CONTENT ── */
+    .content {
+      position: fixed;
+      inset: 0;
+      z-index: 3;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 3rem 2rem;
+    }
+
+    /* ── LOGO ── */
+    .logo {
+      width: 72px;
+      opacity: 0;
+      transform: translateY(-14px);
+      animation: fadeUp 0.9s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
+      animation-delay: 0.5s;
+      margin-bottom: 2.8rem;
+    }
+
+    /* ── DIVIDER LINE ── */
+    .line {
+      width: 0;
+      height: 1px;
+      background: var(--white-dim);
+      animation: expandLine 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
+      animation-delay: 1.4s;
+      margin-bottom: 2.8rem;
+    }
+
+    /* ── COMING SOON ── */
+    .coming-soon {
+      font-family: 'Cormorant Garamond', serif;
+      font-weight: 300;
+      font-size: clamp(26px, 4.5vw, 50px);
+      color: var(--white-warm);
+      letter-spacing: 0.38em;
+      text-transform: uppercase;
+      opacity: 0;
+      animation: fadeIn 1s ease forwards;
+      animation-delay: 2.3s;
+      margin-bottom: 1.6rem;
+      text-align: center;
+      /* remove extra spacing from letter-spacing on last char */
+      text-indent: 0.38em;
+    }
+
+    /* ── TAGLINE ── */
+    .tagline {
+      font-family: 'DM Mono', monospace;
+      font-weight: 300;
+      font-size: clamp(9px, 1.1vw, 12px);
+      color: var(--white-mid);
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      opacity: 0;
+      animation: fadeIn 0.9s ease forwards;
+      animation-delay: 3.1s;
+      text-align: center;
+      text-indent: 0.22em;
+    }
+
+    /* ── BOTTOM BAR ── */
+    .bottom-bar {
+      position: fixed;
+      bottom: 2.4rem;
+      left: 2.4rem;
+      right: 2.4rem;
+      z-index: 3;
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+      opacity: 0;
+      animation: fadeIn 0.9s ease forwards;
+      animation-delay: 3.7s;
+    }
+
+    .metadata {
+      font-family: 'DM Mono', monospace;
+      font-weight: 400;
+      font-size: 9.5px;
+      color: rgba(245, 240, 235, 0.38);
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      line-height: 1.8;
+    }
+
+    /* ── INSTAGRAM BUTTON ── */
+    .instagram-btn {
+      display: flex;
+      align-items: center;
+      gap: 9px;
+      font-family: 'DM Mono', monospace;
+      font-size: 9.5px;
+      font-weight: 400;
+      color: rgba(245, 240, 235, 0.5);
+      letter-spacing: 0.16em;
+      text-decoration: none;
+      text-transform: uppercase;
+      transition: color 0.4s ease;
+    }
+
+    .instagram-btn:hover {
+      color: var(--white-warm);
+    }
+
+    .instagram-btn svg {
+      width: 15px;
+      height: 15px;
+      flex-shrink: 0;
+      opacity: 0.55;
+      transition: opacity 0.4s ease;
+    }
+
+    .instagram-btn:hover svg {
+      opacity: 1;
+    }
+
+    /* ── KEYFRAMES ── */
+    @keyframes fadeUp {
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    @keyframes fadeIn {
+      to {
+        opacity: 1;
+      }
+    }
+
+    @keyframes expandLine {
+      to {
+        width: 100px;
+      }
+    }
+
+    /* ── MOBILE ── */
+    @media (max-width: 640px) {
+      .logo {
+        width: 56px;
+        margin-bottom: 2.2rem;
+      }
+
+      .coming-soon {
+        letter-spacing: 0.25em;
+        text-indent: 0.25em;
+      }
+
+      .metadata {
+        display: none;
+      }
+
+      .bottom-bar {
+        justify-content: center;
+      }
+
+      @keyframes expandLine {
+        to {
+          width: 70px;
+        }
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- VIDEO DE FONDO -->
+  <div class="video-bg">
+    <video autoplay muted loop playsinline preload="auto">
+      <source src="videos/hero-cut.mp4" type="video/mp4">
+    </video>
+  </div>
+
+  <!-- CAPAS -->
+  <div class="overlay-dark"></div>
+  <div class="overlay-scanlines"></div>
+
+  <!-- CONTENIDO PRINCIPAL -->
+  <main class="content" role="main">
+    <img
+      class="logo"
+      src="brand/giina-mark-white.png"
+      alt="Giina Design"
+      width="72"
+      height="72"
+    >
+    <div class="line" role="presentation"></div>
+    <h1 class="coming-soon">Coming Soon</h1>
+    <p class="tagline">Making Design Transcendent</p>
+  </main>
+
+  <!-- BARRA INFERIOR -->
+  <footer class="bottom-bar">
+    <div class="metadata">
+      Mijas, España<br>
+      2026
+    </div>
+    <a
+      class="instagram-btn"
+      href="https://instagram.com/giinadesign"
+      target="_blank"
+      rel="noopener noreferrer"
+      aria-label="Seguir a Giina Design en Instagram"
+      onclick="typeof gtag !== 'undefined' && gtag('event', 'click_instagram', { event_category: 'social', event_label: '@giinadesign' })"
+    >
+      <!-- Instagram icon SVG inline -->
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <rect x="2" y="2" width="20" height="20" rx="5" ry="5"/>
+        <circle cx="12" cy="12" r="4.5"/>
+        <circle cx="17.5" cy="6.5" r="0.8" fill="currentColor" stroke="none"/>
+      </svg>
+      @giinadesign
+    </a>
+  </footer>
+
+</body>
+</html>

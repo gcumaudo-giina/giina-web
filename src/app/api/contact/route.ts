@@ -1,5 +1,4 @@
 import { NextRequest, NextResponse } from "next/server";
-import { Resend } from "resend";
 
 export async function POST(req: NextRequest) {
   if (!process.env.RESEND_API_KEY) {
@@ -17,7 +16,7 @@ export async function POST(req: NextRequest) {
 
   try {
     await resend.emails.send({
-      from: "GIINA Design <onboarding@resend.dev>",
+      from: "GIINA Design <studio@giinadesign.com>",
       to: process.env.CONTACT_TO_EMAIL ?? "info@giinadesign.com",
       replyTo: email,
       subject: `New message from ${name}`,
