@@ -33,7 +33,9 @@ export default function Footer() {
     <footer style={{ background: "#F7F6F4", borderTop: "1px solid #CFCDC9" }}>
 
       {/* ── 4-column info grid ── */}
-      <div style={{
+      <div
+        className="footer-grid"
+        style={{
         display: "grid",
         gridTemplateColumns: "2fr 1fr 1fr 1fr",
         gap: "clamp(2rem, 4vw, 3.5rem)",
@@ -98,7 +100,9 @@ export default function Footer() {
       </div>
 
       {/* ── Bottom legal bar ── */}
-      <div style={{
+      <div
+        className="footer-legal"
+        style={{
         borderTop: "1px solid #CFCDC9",
         padding: "1.2rem clamp(1.25rem, 3.2vw, 2.5rem)",
         display: "flex",
@@ -113,7 +117,7 @@ export default function Footer() {
         color: "#A69885",
       }}>
         <span>© MMXXVI · Giina Design — All Rights Reserved</span>
-        <div style={{ display: "flex", gap: "1.5rem" }}>
+        <div className="footer-legal-links" style={{ display: "flex", gap: "1.5rem" }}>
           {["Privacy", "Imprint", "Cookies"].map((l) => (
             <Link key={l} href="#" style={{ color: "inherit" }} className="foot-link">{l}</Link>
           ))}
@@ -125,13 +129,18 @@ export default function Footer() {
         .foot-link { transition: color 0.3s ease; }
         .foot-link:hover { color: #BC7856 !important; }
         @media (max-width: 880px) {
-          footer > div:nth-child(4) {
+          .footer-grid {
             grid-template-columns: 1fr 1fr !important;
           }
         }
         @media (max-width: 560px) {
-          footer > div:nth-child(4) {
+          .footer-grid {
             grid-template-columns: 1fr !important;
+          }
+          .footer-legal,
+          .footer-legal-links {
+            align-items: flex-start !important;
+            flex-direction: column !important;
           }
         }
       `}</style>

@@ -96,6 +96,50 @@ function buildCSS(projects: GridItem[]): string {
     "  font-style: italic; font-weight: 400;",
     "  color: #8B816E; letter-spacing: -0.005em;",
     "}",
+
+    "@media (max-width: 700px) {",
+    "  .pgrid-preview, .pgrid-bignum { display: none; }",
+    "  .pgrid-head {",
+    "    grid-template-columns: 1fr !important;",
+    "    gap: 1.25rem !important;",
+    "    align-items: start !important;",
+    "  }",
+    "  .pgrid-head h2 {",
+    "    text-align: left !important;",
+    "    white-space: normal !important;",
+    "    font-size: clamp(34px, 10vw, 44px) !important;",
+    "  }",
+    "  .pgrid-head > div:last-child { text-align: left !important; }",
+    "  .pgrid-row {",
+    "    grid-template-columns: 1fr auto !important;",
+    "    gap: .8rem 1rem !important;",
+    "    padding: 1.65rem 0 !important;",
+    "  }",
+    "  .pgrid-row > span:nth-child(1),",
+    "  .pgrid-row > span:nth-child(2),",
+    "  .pgrid-row > span:nth-child(4) { grid-column: 1 / -1; }",
+    "  .pgrid-row > span:nth-child(2) {",
+    "    white-space: normal !important;",
+    "    font-size: clamp(34px, 11vw, 48px) !important;",
+    "  }",
+    "  .pgrid-row > span:nth-child(3) { display: none !important; }",
+    "  .pgrid-row > span:nth-child(4) {",
+    "    text-align: left !important;",
+    "    white-space: normal !important;",
+    "    line-height: 1.6 !important;",
+    "  }",
+    "  .pgrid-row > span:nth-child(5) {",
+    "    grid-column: 2;",
+    "    grid-row: 2 / 4;",
+    "    align-self: center !important;",
+    "    justify-self: end !important;",
+    "  }",
+    "  .pgrid-footer {",
+    "    align-items: flex-start !important;",
+    "    flex-direction: column !important;",
+    "    gap: 1.5rem !important;",
+    "  }",
+    "}",
   ].join("\n");
 }
 
@@ -148,6 +192,7 @@ export default function ProjectsGrid({ limit }: ProjectsGridProps = {}) {
       {/* ── Header ── */}
       <div
         ref={headRef}
+        className="pgrid-head"
         style={{
           display: "grid",
           gridTemplateColumns: "1fr auto 1fr",
@@ -318,7 +363,9 @@ export default function ProjectsGrid({ limit }: ProjectsGridProps = {}) {
         paddingTop: "2.5rem",
         fontFamily: "var(--font-ibm-plex-mono, monospace)",
         fontSize: 10, letterSpacing: ".22em", textTransform: "uppercase", color: "#A69885",
-      }}>
+      }}
+      className="pgrid-footer"
+      >
         <span>{"Press "}<span style={{ color: "#4D5257" }}>P</span>{" to view the full archive"}</span>
         <Link
           href={"/" + locale + "/projects"}

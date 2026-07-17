@@ -97,9 +97,11 @@ export default function ContactPage() {
             <form onSubmit={handleSubmit} style={{ display: "flex", flexDirection: "column", gap: "2.5rem" }}>
 
               <div className="contact-field">
-                <label style={labelStyle}>{t("name")}</label>
+                <label htmlFor="contact-name" style={labelStyle}>{t("name")}</label>
                 <input
+                  id="contact-name"
                   type="text"
+                  autoComplete="name"
                   value={name}
                   onChange={(e) => setName(e.target.value)}
                   required
@@ -109,9 +111,11 @@ export default function ContactPage() {
               </div>
 
               <div className="contact-field">
-                <label style={labelStyle}>{t("email")}</label>
+                <label htmlFor="contact-email" style={labelStyle}>{t("email")}</label>
                 <input
+                  id="contact-email"
                   type="email"
+                  autoComplete="email"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   required
@@ -121,8 +125,9 @@ export default function ContactPage() {
               </div>
 
               <div className="contact-field">
-                <label style={labelStyle}>{t("message")}</label>
+                <label htmlFor="contact-message" style={labelStyle}>{t("message")}</label>
                 <textarea
+                  id="contact-message"
                   value={message}
                   onChange={(e) => setMessage(e.target.value)}
                   required

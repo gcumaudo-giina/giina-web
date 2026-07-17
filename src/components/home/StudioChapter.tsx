@@ -86,7 +86,9 @@ export default function StudioChapter() {
         gap: "clamp(1.25rem, 3.2vw, 3rem)",
         alignItems: "stretch",
         padding: "4rem 0",
-      }}>
+      }}
+      className="studio-chapter-inner"
+      >
 
         {/* Left column — metadata + aside */}
         <aside style={{ display: "flex", flexDirection: "column", justifyContent: "space-between", gap: "2rem" }}>
@@ -147,7 +149,7 @@ export default function StudioChapter() {
 
         {/* Center — animated chapter lines */}
         <div style={{ display: "flex", alignItems: "center" }}>
-          <div style={{ display: "flex", flexDirection: "column", gap: 0 }}>
+          <div className="studio-chapter-lines" style={{ display: "flex", flexDirection: "column", gap: 0 }}>
             {lines.map((line, i) => (
               <div
                 key={i}

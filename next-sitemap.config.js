@@ -8,6 +8,8 @@ module.exports = {
     '*/studio',
     '*/studio/*',
     '/api/*',
+    '/icon.png',
+    '*/icon.png',
   ],
   robotsTxtOptions: {
     policies: [

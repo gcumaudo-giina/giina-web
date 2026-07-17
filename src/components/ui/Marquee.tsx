@@ -16,6 +16,9 @@ export default function Marquee() {
       aria-hidden="true"
       style={{
         overflow: "hidden",
+        width: "100%",
+        maxWidth: "100vw",
+        contain: "paint",
         borderTop: "1px solid #CFCDC9",
         borderBottom: "1px solid #CFCDC9",
         padding: "1.1rem 0",

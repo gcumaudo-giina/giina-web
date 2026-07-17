@@ -14,7 +14,7 @@ const COMING_SOON_BYPASS = [
   "/favicon.ico",
 ];
 
-export default function middleware(request: NextRequest) {
+export default function proxy(request: NextRequest) {
   const { pathname } = request.nextUrl;
 
   if (process.env.NEXT_PUBLIC_COMING_SOON === "true") {
@@ -29,5 +29,5 @@ export default function middleware(request: NextRequest) {
 }
 
 export const config = {
-  matcher: ["/((?!_next|_vercel|.*\\..*).*)" ],
+  matcher: ["/((?!_next|_vercel|.*\\..*).*)"],
 };

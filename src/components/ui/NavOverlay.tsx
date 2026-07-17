@@ -101,7 +101,7 @@ export default function NavOverlay() {
               src="/brand/giina-mark-white.png"
               alt="GIINA"
               width={52}
-              height={24}
+              height={52}
               style={{ width: 52, height: "auto", display: "inline-block" }}
               priority
             />
@@ -172,7 +172,7 @@ export default function NavOverlay() {
                 src="/brand/giina-mark-white.png"
                 alt="GIINA"
                 width={52}
-                height={24}
+                height={52}
                 style={{ width: 52, height: "auto", display: "inline-block" }}
               />
               <button
